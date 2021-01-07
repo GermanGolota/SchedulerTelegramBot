@@ -1,3 +1,4 @@
+using Core;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -9,6 +10,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Npgsql.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace SchedulerTelegramBot
 {
@@ -22,6 +25,11 @@ namespace SchedulerTelegramBot
         }
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<SchedulesContext>(options =>
+            {
+                options.UseNpgsql(Config.GetConnectionString("Main"), b=>b.MigrationsAssembly(nameof(Infrastructure)));
+            });
+
             services.AddHttpClient();
             
             services.AddSingleton<ITelegramBotClientFactory, TelegramBotClientFactory>();

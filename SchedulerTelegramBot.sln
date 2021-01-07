@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchedulerTelegramBot", "SchedulerTelegramBot\SchedulerTelegramBot.csproj", "{89B916B8-164C-41E5-81BB-D8F03BB6C388}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAPI", "SchedulerTelegramBot\WebAPI.csproj", "{89B916B8-164C-41E5-81BB-D8F03BB6C388}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{4C2F2706-6FCE-4DAE-97D3-F2B5D1CA9A96}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{8DEC1D85-A415-4994-B617-8981D1371AE4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{89B916B8-164C-41E5-81BB-D8F03BB6C388}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{89B916B8-164C-41E5-81BB-D8F03BB6C388}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{89B916B8-164C-41E5-81BB-D8F03BB6C388}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C2F2706-6FCE-4DAE-97D3-F2B5D1CA9A96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C2F2706-6FCE-4DAE-97D3-F2B5D1CA9A96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C2F2706-6FCE-4DAE-97D3-F2B5D1CA9A96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C2F2706-6FCE-4DAE-97D3-F2B5D1CA9A96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8DEC1D85-A415-4994-B617-8981D1371AE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DEC1D85-A415-4994-B617-8981D1371AE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DEC1D85-A415-4994-B617-8981D1371AE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DEC1D85-A415-4994-B617-8981D1371AE4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
