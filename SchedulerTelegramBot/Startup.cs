@@ -12,6 +12,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Npgsql.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Hangfire;
+using Hangfire.PostgreSql;
 
 namespace SchedulerTelegramBot
 {
@@ -37,13 +39,23 @@ namespace SchedulerTelegramBot
             services.AddSingleton<ITelegramClientAdapter, TelegramClientAdapter>();
 
             services.AddControllers();
+
+            services.AddHangfire(config =>
+            {
+                config.UsePostgreSqlStorage(Config.GetConnectionString("Hangfire"));
+            });
+            JobStorage.Current = new PostgreSqlStorage(Config.GetConnectionString("Hangfire"));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseHangfireServer();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+
+                app.UseHangfireDashboard();
             }
 
             app.UseRouting();
