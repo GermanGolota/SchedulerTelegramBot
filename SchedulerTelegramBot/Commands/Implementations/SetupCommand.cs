@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Telegram.Bot.Types;
 
-namespace WebAPI.Commands.Implementations
+namespace WebAPI.Commands
 {
     public class SetupCommand : CommandBase
     {
