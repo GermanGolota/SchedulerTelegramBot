@@ -11,7 +11,8 @@ namespace Infrastructure.DTOs
         {
             Alert output = new Alert
             {
-                Message = dto.Message
+                Message = dto.Message,
+                Cron = dto.Cron
             };
             return output;
         }
