@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using Hangfire;
 using Hangfire.PostgreSql;
 using WebAPI.Extensions;
+using WebAPI.Jobs;
 
 namespace SchedulerTelegramBot
 {
@@ -36,6 +37,8 @@ namespace SchedulerTelegramBot
             services.AddHttpClient();
 
             services.AddRepositories();
+
+            services.AddScoped<IJobManager, JobManager>();
 
             services.AddTelegramClient();
             services.AddTelegramCommands();
