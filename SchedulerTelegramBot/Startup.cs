@@ -35,17 +35,21 @@ namespace SchedulerTelegramBot
 
             services.AddHttpClient();
 
-            services.AddTelegramClient();
+            services.AddRepositories();
 
+            services.AddTelegramClient();
             services.AddTelegramCommands();
 
             services.AddControllers();
 
+            var options = new PostgreSqlStorageOptions();
+            options.PrepareSchemaIfNecessary = true;
+
             services.AddHangfire(config =>
             {
-                config.UsePostgreSqlStorage(Config.GetConnectionString("Hangfire"));
+                config.UsePostgreSqlStorage(Config.GetConnectionString("Main"), options);
             });
-            JobStorage.Current = new PostgreSqlStorage(Config.GetConnectionString("Hangfire"));
+            JobStorage.Current = new PostgreSqlStorage(Config.GetConnectionString("Main"), options);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

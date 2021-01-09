@@ -20,9 +20,9 @@ namespace WebAPI.Extensions
         }
         public static IServiceCollection AddTelegramCommands(this IServiceCollection services)
         {
-            services.AddSingleton<StartCommand>();
+            services.AddScoped<StartCommand>();
 
-            services.AddSingleton<MessageRepliesContainer>();
+            services.AddScoped<MessageRepliesContainer>();
 
             return services;
         }
