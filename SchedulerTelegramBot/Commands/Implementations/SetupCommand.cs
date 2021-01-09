@@ -28,10 +28,10 @@ namespace WebAPI.Commands
 
         protected override bool CommandMatches(Update update)
         {
-            if(UpdateIsCommand(update))
+            if (UpdateIsCommand(update))
             {
                 string message = update.Message.Text;
-                if(FirstWordMatchesCommandName(message))
+                if (FirstWordMatchesCommandName(message))
                 {
                     return true;
                 }
@@ -45,53 +45,63 @@ namespace WebAPI.Commands
 
             var chatId = message.Chat.Id.ToString();
 
-            string adminId = _repo.GetAdminIdOfChat(chatId);
-
             string userId = message.From.Id.ToString();
 
-            if (userId.Equals(adminId))
+            if (UserIsAdminInChat(userId, chatId))
             {
                 var document = message.Document;
-                if (document is not null)
-                {
-                    var docId = document.FileId;
-
-
-                    string fileContent;
-                    using (FileStream file = await _client.GetFileStreamFromId(docId))
-                    {
-                        using (StreamReader sr = new StreamReader(file))
-                        {
-                            fileContent = sr.ReadToEnd();
-                        }
-                    }
-                    try
-                    {
-                        var model = JsonConvert.DeserializeObject<ScheduleModel>(fileContent);
-                        try
-                        {
-                            await _jobs.SetupJobsForChat(model, chatId);
-
-                            await _client.SendTextMessageAsync(chatId, "Schedule have been succesfully set");
-                        }
-                        catch(Exception exc)
-                        {
-                            await _client.SendTextMessageAsync(chatId, exc.Message);
-                        }
-                    }
-                    catch
-                    {
-                        await _client.SendTextMessageAsync(chatId, "Data in the file is not valid");
-                    }
-                }
-                else
+                if (document is null)
                 {
                     await _client.SendTextMessageAsync(chatId, "Please attach a file");
+                    return;
+                }
+
+                var docId = document.FileId;
+
+                string fileContent = await GetFileContent(docId);
+
+                try
+                {
+                    var model = JsonConvert.DeserializeObject<ScheduleModel>(fileContent);
+                    await SetupJobs(model, chatId);
+                }
+                catch
+                {
+                    await _client.SendTextMessageAsync(chatId, "Data in the file is not valid");
                 }
             }
             else
             {
-                await _client.SendTextMessageAsync(chatId, "You don't have permission to do so");
+                await _client.SendTextMessageAsync(chatId, "You don't have permission to do that");
+            }
+        }
+        private bool UserIsAdminInChat(string userId, string chatId)
+        {
+            string adminId = _repo.GetAdminIdOfChat(chatId);
+            return userId.Equals(adminId);
+        }
+        private async Task<string> GetFileContent(string fileId)
+        {
+            using (FileStream file = await _client.GetFileStreamFromId(fileId))
+            {
+                using (StreamReader sr = new StreamReader(file))
+                {
+                    string fileContent = sr.ReadToEnd();
+                    return fileContent;
+                }
+            }
+        }
+        private async Task SetupJobs(ScheduleModel model, string chatId)
+        {
+            try
+            {
+                await _jobs.SetupJobsForChat(model, chatId);
+
+                await _client.SendTextMessageAsync(chatId, "Schedule have been succesfully set");
+            }
+            catch (Exception exc)
+            {
+                await _client.SendTextMessageAsync(chatId, exc.Message);
             }
         }
     }
