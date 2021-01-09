@@ -2,9 +2,13 @@
 using SchedulerTelegramBot.Client;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Telegram.Bot.Types;
+using Newtonsoft.Json;
+using Infrastructure.DTOs;
+using WebAPI.Jobs;
 
 namespace WebAPI.Commands
 {
@@ -12,11 +16,13 @@ namespace WebAPI.Commands
     {
         private readonly IChatRepo _repo;
         private readonly ITelegramClientAdapter _client;
+        private readonly IJobManager _jobs;
 
-        public SetupCommand(IChatRepo repo, ITelegramClientAdapter client)
+        public SetupCommand(IChatRepo repo, ITelegramClientAdapter client, IJobManager jobs)
         {
             this._repo = repo;
             this._client = client;
+            this._jobs = jobs;
         }
         public override string CommandName => "setup";
 
@@ -50,10 +56,33 @@ namespace WebAPI.Commands
                 {
                     var docId = document.FileId;
 
-                    //readFile
 
-                    //addFileToDB
+                    string fileContent;
+                    using (FileStream file = await _client.GetFileStreamFromId(docId))
+                    {
+                        using (StreamReader sr = new StreamReader(file))
+                        {
+                            fileContent = sr.ReadToEnd();
+                        }
+                    }
+                    try
+                    {
+                        var model = JsonConvert.DeserializeObject<ScheduleModel>(fileContent);
+                        try
+                        {
+                            await _jobs.SetupJobsForChat(model, chatId);
 
+                            await _client.SendTextMessageAsync(chatId, "Schedule have been succesfully set");
+                        }
+                        catch(Exception exc)
+                        {
+                            await _client.SendTextMessageAsync(chatId, exc.Message);
+                        }
+                    }
+                    catch
+                    {
+                        await _client.SendTextMessageAsync(chatId, "Data in the file is not valid");
+                    }
                 }
                 else
                 {
