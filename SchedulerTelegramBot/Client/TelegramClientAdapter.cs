@@ -41,5 +41,11 @@ namespace SchedulerTelegramBot.Client
             var output = await client.DownloadFileAsync(fileId) as FileStream;
             return output;
         }
+
+        public async Task SendStickerAsync(ChatId chat, string stickerLocation)
+        {
+            var client = await telegramClient.Value;
+            await client.SendStickerAsync(chat, stickerLocation);
+        }
     }
 }
