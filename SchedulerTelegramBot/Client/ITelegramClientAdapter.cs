@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.IO;
+using System.Threading.Tasks;
 using Telegram.Bot.Types;
 
 namespace SchedulerTelegramBot.Client
@@ -7,5 +8,7 @@ namespace SchedulerTelegramBot.Client
     {
         Task BootUpClient();
         Task SendTextMessageAsync(ChatId chat, string message);
+
+        Task<FileStream> GetFileStreamFromId(string fileId);
     }
 }

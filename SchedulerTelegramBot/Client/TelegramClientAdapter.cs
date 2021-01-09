@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Telegram.Bot;
@@ -31,7 +32,14 @@ namespace SchedulerTelegramBot.Client
         //Webhook needs to be setup before receiving any messages
         public async Task BootUpClient()
         {
+            await telegramClient.Value;
+        }
+
+        public async Task<FileStream> GetFileStreamFromId(string fileId)
+        {
             var client = await telegramClient.Value;
+            var output = await client.DownloadFileAsync(fileId) as FileStream;
+            return output;
         }
     }
 }
