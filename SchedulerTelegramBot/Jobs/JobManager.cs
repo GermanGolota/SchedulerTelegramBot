@@ -1,4 +1,5 @@
-﻿using Hangfire;
+﻿using Core.Entities;
+using Hangfire;
 using Infrastructure.DTOs;
 using Infrastructure.Repositories;
 using SchedulerTelegramBot.Client;
@@ -13,13 +14,17 @@ namespace WebAPI.Jobs
 {
     public class JobManager : IJobManager
     {
-        private readonly IScheduleRepo _repo;
+        private readonly IScheduleRepo _scheduleRepo;
         private readonly ITelegramClientAdapter _client;
+        private readonly IChatRepo _chatRepo;
+        private readonly IAlertRepo _alertRepo;
 
-        public JobManager(IScheduleRepo repo, ITelegramClientAdapter client)
+        public JobManager(IScheduleRepo schedule, ITelegramClientAdapter client, IChatRepo chat, IAlertRepo alert)
         {
-            this._repo = repo;
+            this._scheduleRepo = schedule;
             this._client = client;
+            this._chatRepo = chat;
+            this._alertRepo = alert;
         }
 
         public async Task SetupJobsForChat(ScheduleModel model, ChatId chat)
@@ -27,12 +32,16 @@ namespace WebAPI.Jobs
             try
             {
                 string chatId = chat.Identifier.ToString();
-                await _repo.TryApplyScheduleToChat(model, chatId);
+                await _scheduleRepo.TryApplyScheduleToChat(model, chatId);
+
+                List<Alert> alerts = _chatRepo.GetAlertsOfChat(chatId);
+
                 int JobCount = 0;
-                foreach (AlertModel alert in model.Alerts)
+                foreach (Alert alert in alerts)
                 {
-                    RecurringJob.AddOrUpdate<HangfireActions>(GenerateJobId(chatId, JobCount),
-                        x=>x.SendAlertMessage(alert.Message, chatId), alert.Cron);
+                    string jobId = GenerateJobId(chatId, JobCount);
+                    RecurringJob.AddOrUpdate<HangfireActions>(jobId, x=>x.SendAlertMessage(alert.Message, chatId), alert.Cron);
+                    await _alertRepo.UpdateJobId(alert, jobId);
                     JobCount++;
                 }
             }
