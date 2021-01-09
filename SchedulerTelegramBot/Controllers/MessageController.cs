@@ -1,14 +1,7 @@
-﻿using Infrastructure.Repositories;
-using Microsoft.AspNetCore.Mvc;
-using SchedulerTelegramBot.Client;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Telegram.Bot.Types;
 using WebAPI.Commands;
-using WebAPI.Jobs;
 
 namespace SchedulerTelegramBot.Controllers
 {
