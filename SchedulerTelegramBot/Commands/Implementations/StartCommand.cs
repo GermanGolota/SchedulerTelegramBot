@@ -12,7 +12,7 @@ namespace WebAPI.Commands
     {
         private readonly IChatRepo _repo;
         private readonly ITelegramClientAdapter _client;
-        private const string StartupStickerLocation = @"https://i.imgur.com/d6333cg.png";
+        private const string StartupStickerId = @"CAACAgIAAxkBAAMrX_oDjl4RZ7SqvMaNBxaTese356AAAg0AA3EcFxMefvS-UNPkwR4E";
         public StartCommand(IChatRepo repo, ITelegramClientAdapter client)
         {
             this._repo = repo;
@@ -46,7 +46,7 @@ namespace WebAPI.Commands
             {
                 await _repo.AddChat(chatId, adminId);
 
-                await _client.SendStickerAsync(chatId, StartupStickerLocation);
+                await _client.SendStickerAsync(chatId, StartupStickerId);
 
                 await _client.SendTextMessageAsync(chatId, "Activated");
             }
