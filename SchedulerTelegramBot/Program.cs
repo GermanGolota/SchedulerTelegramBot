@@ -1,8 +1,13 @@
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SchedulerTelegramBot.Client;
+using SchedulerTelegramBot.Controllers;
+using System;
 using System.Threading.Tasks;
+using Telegram.Bot;
+using WebAPI.Commands;
 
 namespace SchedulerTelegramBot
 {
@@ -22,7 +27,7 @@ namespace SchedulerTelegramBot
             return Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    //webBuilder.UseKestrel();
+                    webBuilder.UseKestrel();
                     webBuilder.UseStartup<Startup>();
                 });
         }
@@ -30,10 +35,41 @@ namespace SchedulerTelegramBot
         {
             using (var scope = host.Services.CreateScope())
             {
-                var client = scope.ServiceProvider.GetService<ITelegramClientAdapter>();
+                var provider = scope.ServiceProvider;
+                var client = provider.GetService<ITelegramClientAdapter>();
                 await client.BootUpClient();
+#if DEBUG
+                await GetUpdatesManually(provider);
+#endif
             }
         }
+#if DEBUG
+        private static async Task GetUpdatesManually(IServiceProvider provider)
+        {
+            var config = provider.GetService<IConfiguration>();
+            string token = config.GetValue<string>("Token");
+            TelegramBotClient client = new TelegramBotClient(token);
+            await client.DeleteWebhookAsync();
 
+            var repliesContainer = provider.GetService<MessageRepliesContainer>();
+
+            var controller = new MessageController(repliesContainer);
+
+            int updateCount = 0;
+
+            while (true)
+            {
+                var updates = await client.GetUpdatesAsync(offset: updateCount+1);
+
+                foreach (var update in updates)
+                {
+                    await controller.Update(update);
+                    updateCount = update.Id;
+                }
+
+                await Task.Delay(1000);
+            }
+        }
+#endif
     }
 }
