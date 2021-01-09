@@ -12,8 +12,12 @@ namespace WebAPI.Commands
         {
             if (UpdateContainsMessage(update))
             {
-                bool isCommand = update.Message.Text.StartsWith("/");
-                return isCommand;
+                var message = update.Message;
+                if(message.Text is not null)
+                {
+                    bool isCommand = message.Text.StartsWith("/");
+                    return isCommand;
+                }  
             }
             return false;
 
