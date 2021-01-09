@@ -10,22 +10,24 @@ namespace WebAPI.Commands
     {
         public bool UpdateIsCommand(Update update)
         {
-            try
+            if (UpdateContainsMessage(update))
             {
                 bool isCommand = update.Message.Text.StartsWith("/");
                 return isCommand;
             }
-            catch
-            {
-                return false;
-            }
+            return false;
+
+        }
+        private bool UpdateContainsMessage(Update update)
+        {
+            return update.Message is not null;
         }
         public bool FirstWordMatchesCommandName(string str)
         {
             string message = str.Replace("/", "");
 
             string firstWord = GetFirstWord(message);
-           
+
             return StringEqualsName(firstWord);
         }
         private string GetFirstWord(string str)
