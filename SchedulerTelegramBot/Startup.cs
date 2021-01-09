@@ -14,6 +14,7 @@ using Npgsql.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Hangfire;
 using Hangfire.PostgreSql;
+using WebAPI.Extensions;
 
 namespace SchedulerTelegramBot
 {
@@ -33,10 +34,10 @@ namespace SchedulerTelegramBot
             });
 
             services.AddHttpClient();
-            
-            services.AddSingleton<ITelegramBotClientFactory, TelegramBotClientFactory>();
 
-            services.AddSingleton<ITelegramClientAdapter, TelegramClientAdapter>();
+            services.AddTelegramClient();
+
+            services.AddTelegramCommands();
 
             services.AddControllers();
 
