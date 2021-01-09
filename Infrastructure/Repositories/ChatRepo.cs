@@ -60,11 +60,12 @@ namespace Infrastructure.Repositories
                 throw new Exception("That chat is not yet in the system");
             }
 
-            var schedule = _context.Schedules.Include(sch=>sch.Alerts).Where(sch => sch.ScheduleId == chat.ScheduleId).First();
+            var alerts = _context.Schedules.Include(sch=>sch.Alerts).Where(sch => sch.ScheduleId == chat.ScheduleId)
+                .Select(sch=> sch.Alerts).First();
 
-            List<Alert> alerts = schedule.Alerts.ToList();
+            List<Alert> output = alerts.ToList();
 
-            return alerts;
+            return output;
         }
     }
 }
