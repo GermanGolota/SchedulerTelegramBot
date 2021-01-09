@@ -16,6 +16,7 @@ namespace WebAPI.Extensions
 
             services.AddScoped<IChatRepo, ChatRepo>();
             services.AddScoped<IScheduleRepo, ScheduleRepo>();
+            services.AddScoped<IAlertRepo, AlertRepo>();
 
             return services;
         }
