@@ -1,5 +1,6 @@
 ﻿using Core;
 using Core.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,6 +49,22 @@ namespace Infrastructure.Repositories
             }
 
             return chat.AdminId;
+        }
+
+        public List<Alert> GetAlertsOfChat(string chatId)
+        {
+            var chat = _context.Chats.Include(chat=>chat.Schedule).First(chat => chat.ChatId == chatId);
+
+            if (chat is null)
+            {
+                throw new Exception("That chat is not yet in the system");
+            }
+
+            var schedule = _context.Schedules.Include(sch=>sch.Alerts).Where(sch => sch.ScheduleId == chat.ScheduleId).First();
+
+            List<Alert> alerts = schedule.Alerts.ToList();
+
+            return alerts;
         }
     }
 }
