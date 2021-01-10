@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Infrastructure.Exceptions
 {
-    class ChatDontExistException:DataAccessException
+    public class ChatDontExistException:DataAccessException
     {
         public ChatDontExistException():base(ExceptionMessages.ChatDontExistsMessage)
         {
