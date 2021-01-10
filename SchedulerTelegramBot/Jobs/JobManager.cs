@@ -14,14 +14,12 @@ namespace WebAPI.Jobs
     public class JobManager : IJobManager
     {
         private readonly IScheduleRepo _scheduleRepo;
-        private readonly ITelegramClientAdapter _client;
         private readonly IChatRepo _chatRepo;
         private readonly IAlertRepo _alertRepo;
 
-        public JobManager(IScheduleRepo schedule, ITelegramClientAdapter client, IChatRepo chat, IAlertRepo alert)
+        public JobManager(IScheduleRepo schedule, IChatRepo chat, IAlertRepo alert)
         {
             this._scheduleRepo = schedule;
-            this._client = client;
             this._chatRepo = chat;
             this._alertRepo = alert;
         }
@@ -44,9 +42,9 @@ namespace WebAPI.Jobs
                     JobCount++;
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                await _client.SendTextMessageAsync(chat, $"Something went wrong, while adding jobs: {ex.Message}");
+                throw;
             }
         }
         private string GenerateJobId(string chatId, int count)
