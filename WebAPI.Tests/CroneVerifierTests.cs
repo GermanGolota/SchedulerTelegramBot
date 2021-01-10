@@ -13,6 +13,7 @@ namespace WebAPI.Tests
         private ICroneVerifier _sut;
         public CroneVerifierTests()
         {
+            _sut = new CroneVerifier();
         }
         [Fact]
         public void VerifyCron_ShouldFail_EmptyCron()
