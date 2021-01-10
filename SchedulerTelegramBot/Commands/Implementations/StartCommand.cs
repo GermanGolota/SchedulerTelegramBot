@@ -52,9 +52,9 @@ namespace WebAPI.Commands
 
                 await _client.SendTextMessageAsync(chatId, "Activated");
             }
-            catch(ChatAlreadyExistsException)
+            catch(DataAccessException exc)
             {
-                await _client.SendTextMessageAsync(chatId, "Already activated, sorry");
+                await _client.SendTextMessageAsync(chatId, exc.Message);
             }
             catch(Exception exc)
             {

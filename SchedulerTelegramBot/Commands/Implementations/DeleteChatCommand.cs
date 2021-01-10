@@ -52,16 +52,17 @@ namespace WebAPI.Commands
             try
             {
                 await _repo.DeleteChat(ChatIdToBeDeleted);
+
+                await _client.SendTextMessageAsync(ChatIdToBeDeleted, "Successfully deleted chat");
             }
-            catch(ChatDontExistException)
+            catch(DataAccessException exc)
             {
-                await _client.SendTextMessageAsync(ChatIdToBeDeleted, "This chat is not being traced");
+                await _client.SendTextMessageAsync(ChatIdToBeDeleted, exc.Message);
             }
             catch(Exception exc)
             {
                 _logger.LogError(exc, "Were not able to delete chat");
             }
-            await _client.SendTextMessageAsync(ChatIdToBeDeleted, "Successfully deleted chat");
         }
     }
 }

@@ -18,8 +18,8 @@ namespace WebAPI.Commands
         private readonly IJobManager _jobs;
         private readonly ILogger<SetupCommand> _logger;
 
-        public SetupCommand(IChatRepo repo, ITelegramClientAdapter client, IJobManager jobs, 
-            ILogger<SetupCommand> logger):base(repo)
+        public SetupCommand(IChatRepo repo, ITelegramClientAdapter client, IJobManager jobs,
+            ILogger<SetupCommand> logger) : base(repo)
         {
             this._client = client;
             this._jobs = jobs;
@@ -70,11 +70,15 @@ namespace WebAPI.Commands
                 var model = JsonConvert.DeserializeObject<ScheduleModel>(fileContent);
                 await SetupJobs(model, chatId);
             }
-            catch(JsonException)
+            catch (JsonException)
             {
                 await _client.SendTextMessageAsync(chatId, "Data in the file is not valid");
             }
-            catch(Exception exc)
+            catch (DataAccessException exc)
+            {
+                await _client.SendTextMessageAsync(chatId, exc.Message);
+            }
+            catch (Exception exc)
             {
                 _logger.LogError(exc, "Were not able to setup jobs");
                 throw;
@@ -94,24 +98,10 @@ namespace WebAPI.Commands
         }
         private async Task SetupJobs(ScheduleModel model, string chatId)
         {
-            try
-            {
-                await _jobs.SetupJobsForChat(model, chatId);
+            await _jobs.SetupJobsForChat(model, chatId);
 
-                await _client.SendTextMessageAsync(chatId, "Schedule have been succesfully set");
-            }
-            catch(ChatDontExistException)
-            {
-                await _client.SendTextMessageAsync(chatId, "This chat is not registered yet");
-            }
-            catch(CroneVerificationException)
-            {
-                await _client.SendTextMessageAsync(chatId, "Some of the crons in the file were not the best");
-            }
-            catch (Exception exc)
-            {
-                _logger.LogError(exc, "Failed to add setup jobs");
-            }
+            await _client.SendTextMessageAsync(chatId, "Schedule have been succesfully set");
+
         }
     }
 }
