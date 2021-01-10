@@ -83,10 +83,10 @@ namespace Infrastructure.Repositories
                 throw new ChatDontExistException();
             }
 
-            var alerts = _context.Schedules.Include(sch => sch.Alerts).Where(sch => sch.ScheduleId == chat.ScheduleId)
-                .Select(sch => sch.Alerts).First();
+            var schedule = _context.Schedules.AsNoTracking().Include(sch => sch.Alerts)
+                .Where(sch => sch.ScheduleId == chat.ScheduleId).First();
 
-            List<Alert> output = alerts.ToList();
+            List<Alert> output = schedule.Alerts.ToList();
 
             return output;
         }
