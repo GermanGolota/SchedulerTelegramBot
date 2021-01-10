@@ -32,7 +32,7 @@ namespace WebAPI.Commands
             if (UpdateIsCommand(update))
             {
                 var message = update.Message;
-                string messageCaption = message.Caption;
+                string messageCaption = message.Caption??"";
                 if (FirstWordMatchesCommandName(messageCaption))
                 {
                     var chatId = message.Chat.Id.ToString();
