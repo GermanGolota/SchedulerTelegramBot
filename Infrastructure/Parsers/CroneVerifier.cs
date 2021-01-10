@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Infrastructure.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Infrastructure.Parsers
 {
@@ -20,9 +20,6 @@ namespace Infrastructure.Parsers
             {
                 return value < Lower || value > Upper;
             }
-        }
-        private class CroneVerificationException : Exception
-        {
         }
         private readonly List<char> AllowedSpecialChars = new List<char>
         {
