@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Infrastructure.Exceptions
 {
-    class CroneVerificationException:DataAccessException
+    public class CroneVerificationException:DataAccessException
     {
         public CroneVerificationException():base(ExceptionMessages.BadCrones)
         {

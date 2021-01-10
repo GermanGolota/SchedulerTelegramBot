@@ -111,6 +111,10 @@ namespace WebAPI.Commands
             {
                 await _client.SendTextMessageAsync(chatId, "This chat is not registered yet");
             }
+            catch(CroneVerificationException)
+            {
+                await _client.SendTextMessageAsync(chatId, "Some of the crons in the file were not the best");
+            }
             catch (Exception exc)
             {
                 _logger.LogError(exc, "Failed to add setup jobs");
