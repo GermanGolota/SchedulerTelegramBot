@@ -5,7 +5,7 @@ namespace WebAPI.Commands
 {
     public abstract class CommandBase : MessageReplyBase
     {
-        public bool UpdateIsCommand(Update update)
+        protected bool UpdateIsCommand(Update update)
         {
             if (UpdateContainsMessage(update))
             {
@@ -23,7 +23,7 @@ namespace WebAPI.Commands
         {
             return update.Message is not null;
         }
-        public bool FirstWordMatchesCommandName(string str)
+        protected bool FirstWordMatchesCommandName(string str)
         {
             string message = str.Replace("/", "");
 
