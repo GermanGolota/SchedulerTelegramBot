@@ -5,6 +5,6 @@ namespace Infrastructure.Repositories
 {
     public interface IAlertRepo
     {
-        Task UpdateJobId(Alert alert, string jobId); 
+        Task UpdateJobId(int alertId, string jobId); 
     }
 }

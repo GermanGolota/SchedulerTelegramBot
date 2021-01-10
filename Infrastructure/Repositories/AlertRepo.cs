@@ -12,9 +12,9 @@ namespace Infrastructure.Repositories
         {
             this._context = context;
         }
-        public async Task UpdateJobId(Alert alert, string jobId)
+        public async Task UpdateJobId(int alertId, string jobId)
         {
-            _context.Attach(alert);
+            var alert = _context.Find<Alert>(alertId);
 
             alert.JobId = jobId;
 
