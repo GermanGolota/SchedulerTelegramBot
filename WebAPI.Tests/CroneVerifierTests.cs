@@ -52,9 +52,29 @@ namespace WebAPI.Tests
         [InlineData("* 32 * *")]
         [InlineData("* * 0 *")]
         [InlineData("* 13 *")]
-        [InlineData("*-1")]
+        [InlineData("* -1")]
         [InlineData("7")]
         public void VerifyCron_ShouldFail_MissingArguments(string cron)
+        {
+            //Act
+            bool result = _sut.VerifyCron(cron);
+            //Assert
+            Assert.False(result);
+        }
+        [Theory]
+        [InlineData("* * 4-2 * *")]
+        [InlineData("53-48 * * *")]
+        public void VerifyCron_ShouldFail_SecondValueOfRangeLessThenFirst(string cron)
+        {
+            //Act
+            bool result = _sut.VerifyCron(cron);
+            //Assert
+            Assert.False(result);
+        }
+        [Theory]
+        [InlineData("* * 4,4-2 * *")]
+        [InlineData("50,52,53-48 * * *")]
+        public void VerifyCron_ShouldFail_SecondValueOfRangeLessThenFirstIncludesSeparator(string cron)
         {
             //Act
             bool result = _sut.VerifyCron(cron);
