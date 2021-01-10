@@ -5,6 +5,7 @@ using Microsoft.Extensions.Hosting;
 using SchedulerTelegramBot.Client;
 using SchedulerTelegramBot.Controllers;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Telegram.Bot;
 using WebAPI.Commands;
@@ -55,16 +56,20 @@ namespace SchedulerTelegramBot
 
             var controller = new MessageController(repliesContainer);
 
-            int updateCount = 0;
+            var initialUpdates = await client.GetUpdatesAsync();
+
+            var lastUpdate = initialUpdates.LastOrDefault();
+
+            int lastUpdateId = lastUpdate?.Id ?? 0;
 
             while (true)
             {
-                var updates = await client.GetUpdatesAsync(offset: updateCount+1);
+                var updates = await client.GetUpdatesAsync(offset: lastUpdateId+1);
 
                 foreach (var update in updates)
                 {
                     await controller.Update(update);
-                    updateCount = update.Id;
+                    lastUpdateId = update.Id;
                 }
 
                 await Task.Delay(1000);
