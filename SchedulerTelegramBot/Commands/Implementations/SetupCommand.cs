@@ -67,9 +67,13 @@ namespace WebAPI.Commands
                 var model = JsonConvert.DeserializeObject<ScheduleModel>(fileContent);
                 await SetupJobs(model, chatId);
             }
-            catch
+            catch(JsonException)
             {
                 await _client.SendTextMessageAsync(chatId, "Data in the file is not valid");
+            }
+            catch(Exception)
+            {
+                throw;
             }
 
         }
