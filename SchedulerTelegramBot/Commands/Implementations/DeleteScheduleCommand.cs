@@ -17,7 +17,7 @@ namespace WebAPI.Commands
         private readonly IJobManager _jobs;
         private readonly ILogger<DeleteScheduleCommand> _logger;
 
-        public DeleteScheduleCommand(IChatRepo repo, ITelegramClientAdapter client, IJobManager jobs, 
+        public DeleteScheduleCommand(IChatRepo repo, ITelegramClientAdapter client, IJobManager jobs,
             ILogger<DeleteScheduleCommand> logger) : base(repo)
         {
             this._client = client;
@@ -55,9 +55,14 @@ namespace WebAPI.Commands
                 await _jobs.DeleteJobsFromChat(chatId);
                 await _client.SendTextMessageAsync(chatId, "Succesfully deleted schedule");
             }
-            catch(DataAccessException exc)
+            catch (DataAccessException exc)
             {
                 await _client.SendTextMessageAsync(chatId, exc.Message);
+            }
+            catch (Exception exc)
+            {
+                _logger.LogError(exc, "Were not able to delete schedule");
+                throw;
             }
         }
     }
