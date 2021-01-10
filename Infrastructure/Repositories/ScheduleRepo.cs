@@ -1,5 +1,6 @@
 ﻿using Core;
 using Infrastructure.DTOs;
+using Infrastructure.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
@@ -21,7 +22,7 @@ namespace Infrastructure.Repositories
             var chat = await _context.Chats.FirstAsync(chat => chat.ChatId == ChatId);
             if(chat is null)
             {
-                throw new Exception("No such chat");
+                throw new ChatDontExistException();
             }
             if(chat.Schedule is null)
             {
@@ -29,7 +30,7 @@ namespace Infrastructure.Repositories
             }
             else
             {
-                throw new Exception("This chat already has schedule attached to it");
+                throw new ScheduleAlreadyAttachedException();
             }
             _context.SaveChanges();
         }
