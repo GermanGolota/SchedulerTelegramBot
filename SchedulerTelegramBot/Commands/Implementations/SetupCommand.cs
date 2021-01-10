@@ -87,9 +87,10 @@ namespace WebAPI.Commands
         }
         private async Task<string> GetFileContent(string fileId)
         {
-            using (FileStream file = await _client.GetFileStreamFromId(fileId))
+            string fileLocation = await _client.DownloadFileFromId(fileId);
+            using (FileStream stream = new FileStream(fileLocation, FileMode.Open, FileAccess.Read))
             {
-                using (StreamReader sr = new StreamReader(file))
+                using (StreamReader sr = new StreamReader(stream))
                 {
                     string fileContent = sr.ReadToEnd();
                     return fileContent;

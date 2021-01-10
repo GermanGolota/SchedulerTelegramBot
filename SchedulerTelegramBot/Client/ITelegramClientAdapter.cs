@@ -10,7 +10,7 @@ namespace SchedulerTelegramBot.Client
 
         Task SendTextMessageAsync(ChatId chat, string message);
 
-        Task<FileStream> GetFileStreamFromId(string fileId);
+        Task<string> DownloadFileFromId(string fileId);
 
         Task SendStickerAsync(ChatId chat, string stickerLocation);
     }

@@ -10,11 +10,14 @@ namespace SchedulerTelegramBot.Client
     public class TelegramClientAdapter : ITelegramClientAdapter
     {
         private readonly Lazy<Task<ITelegramBotClient>> telegramClient;
+        private readonly IConfiguration _config;
 
         public TelegramClientAdapter(ITelegramBotClientFactory clientFactory, IConfiguration config)
         {
-            string token = config.GetValue<string>("Token");
-            string webhook = config.GetValue<string>("Webhook");
+
+            _config = config;
+            string token = _config.GetValue<string>("Token");
+            string webhook = _config.GetValue<string>("Webhook");
 
             this.telegramClient = new Lazy<Task<ITelegramBotClient>>(async () =>
             {
@@ -32,12 +35,17 @@ namespace SchedulerTelegramBot.Client
         {
             await telegramClient.Value;
         }
-
-        public async Task<FileStream> GetFileStreamFromId(string fileId)
+        //returns location to which the file were stored
+        public async Task<string> DownloadFileFromId(string fileId)
         {
             var client = await telegramClient.Value;
-            var output = await client.DownloadFileAsync(fileId) as FileStream;
-            return output;
+            var file = await client.GetFileAsync(fileId);
+            string fileBase = _config.GetValue<string>("DownloadFilesLocationBase");
+            string fileLocation = fileBase + Guid.NewGuid().ToString()+".json";
+            FileStream fs = new FileStream(fileLocation, FileMode.Create);
+            await client.DownloadFileAsync(file.FilePath, fs);
+            fs.Close();
+            return fileLocation;
         }
 
         public async Task SendStickerAsync(ChatId chat, string stickerLocation)
