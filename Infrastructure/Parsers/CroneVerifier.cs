@@ -16,9 +16,9 @@ namespace Infrastructure.Parsers
                 Lower = lower;
                 Upper = upper;
             }
-            public bool ValueWithinBoundary(int value)
+            public bool ValueNotWithinBoundary(int value)
             {
-                return value >= Lower && value <= Upper;
+                return value < Lower || value > Upper;
             }
         }
         private class CroneVerificationException : Exception
@@ -68,24 +68,38 @@ namespace Infrastructure.Parsers
         private void VerifyEntrie(string entrie, int entriePosition)
         {
             Boundary boundary = GetBoundarieForEntrie(entriePosition);
+
+            int leftSideOfRange = -1;
+
             for (int i = 0; i < entrie.Length; i++)
             {
                 char character = entrie[i];
                 if (IsDigit(character))
                 {
                     int number = GetIntRepresentation(character);
-                    int nextCharacterIndex = i + 1;
-                    if (nextCharacterIndex < entrie.Length)
+                    if (NextCharacterIsDigit(i, entrie))
                     {
-                        char nextCharacter = entrie[nextCharacterIndex];
-                        if (IsDigit(nextCharacter))
+                        char nextCharacter = GetNextCharacter(i, entrie);
+                        number *= 10;
+                        number += GetIntRepresentation(nextCharacter);
+                        i++;
+                    }
+                    if (leftSideOfRange != -1)
+                    {
+                        if (number < leftSideOfRange)
                         {
-                            number *= 10;
-                            number += GetIntRepresentation(nextCharacter);
-                            i++;
+                            throw new CroneVerificationException();
                         }
                     }
-                    bool IsNotWithinBoundarie = !boundary.ValueWithinBoundary(number);
+                    if (HasNextCharacter(i, entrie))
+                    {
+                        char next = GetNextCharacter(i, entrie);
+                        if (next == '-')
+                        {
+                            leftSideOfRange = number;
+                        }
+                    }
+                    bool IsNotWithinBoundarie = boundary.ValueNotWithinBoundary(number);
                     if (IsNotWithinBoundarie)
                     {
                         throw new CroneVerificationException();
@@ -102,14 +116,46 @@ namespace Infrastructure.Parsers
                     {
                         if (character == '-')
                         {
-                            if (i == 0)
-                            {
-                                throw new CroneVerificationException();
-                            }
+                            ThrowIfRepresentsnegativeNumber(entrie, i);
                         }
                     }
                 }
             }
+        }
+        private void ThrowIfRepresentsnegativeNumber(string entrie, int position)
+        {
+            if (position == 0)
+            {
+                throw new CroneVerificationException();
+            }
+            else
+            {
+                int previousCharacterIndex = position - 1;
+                char previousCharacter = entrie[previousCharacterIndex];
+                if (previousCharacter == '-' || previousCharacter == ',')
+                {
+                    throw new CroneVerificationException();
+                }
+            }
+        }
+        private bool NextCharacterIsDigit(int i, string entrie)
+        {
+            if (HasNextCharacter(i, entrie))
+            {
+                char nextCharacter = GetNextCharacter(i, entrie);
+                return IsDigit(nextCharacter);
+            }
+            return false;
+        }
+        private bool HasNextCharacter(int i, string str)
+        {
+            int nextIndex = i + 1;
+            return nextIndex < str.Length;
+        }
+        private char GetNextCharacter(int i, string str)
+        {
+            int nextCharacterIndex = i + 1;
+            return str[nextCharacterIndex];
         }
         private bool IsDigit(char character)
         {
