@@ -19,7 +19,7 @@ namespace WebAPI.Commands
         }
         public override string CommandName => "start";
 
-        protected override bool CommandMatches(Update update)
+        protected override async Task<bool> CommandMatches(Update update)
         {
             if (UpdateIsCommand(update))
             {

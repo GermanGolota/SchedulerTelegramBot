@@ -24,13 +24,21 @@ namespace WebAPI.Commands
         }
         public override string CommandName => "setup";
 
-        protected override bool CommandMatches(Update update)
+        protected override async Task<bool> CommandMatches(Update update)
         {
             if (UpdateIsCommand(update))
             {
-                string message = update.Message.Text;
-                if (FirstWordMatchesCommandName(message))
+                var message = update.Message;
+                string messageText = message.Text;
+                if (FirstWordMatchesCommandName(messageText))
                 {
+                    var chatId = message.Chat.Id.ToString();
+                    string userId = message.From.Id.ToString();
+                    if (!UserIsAdminInChat(userId, chatId))
+                    {
+                        await _client.SendTextMessageAsync(chatId, "You don't have permission to do that");
+                        return false;
+                    }
                     return true;
                 }
             }
@@ -43,35 +51,27 @@ namespace WebAPI.Commands
 
             var chatId = message.Chat.Id.ToString();
 
-            string userId = message.From.Id.ToString();
-
-            if (UserIsAdminInChat(userId, chatId))
+            var document = message.Document;
+            if (document is null)
             {
-                var document = message.Document;
-                if (document is null)
-                {
-                    await _client.SendTextMessageAsync(chatId, "Please attach a file");
-                    return;
-                }
-
-                var docId = document.FileId;
-
-                string fileContent = await GetFileContent(docId);
-
-                try
-                {
-                    var model = JsonConvert.DeserializeObject<ScheduleModel>(fileContent);
-                    await SetupJobs(model, chatId);
-                }
-                catch
-                {
-                    await _client.SendTextMessageAsync(chatId, "Data in the file is not valid");
-                }
+                await _client.SendTextMessageAsync(chatId, "Please attach a file");
+                return;
             }
-            else
+
+            var docId = document.FileId;
+
+            string fileContent = await GetFileContent(docId);
+
+            try
             {
-                await _client.SendTextMessageAsync(chatId, "You don't have permission to do that");
+                var model = JsonConvert.DeserializeObject<ScheduleModel>(fileContent);
+                await SetupJobs(model, chatId);
             }
+            catch
+            {
+                await _client.SendTextMessageAsync(chatId, "Data in the file is not valid");
+            }
+
         }
         private bool UserIsAdminInChat(string userId, string chatId)
         {

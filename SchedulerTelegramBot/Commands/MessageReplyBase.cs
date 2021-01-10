@@ -8,7 +8,7 @@ namespace WebAPI.Commands
         public abstract string CommandName { get; }
         public async Task<CommandMatchResult> ExecuteCommandIfMatched(Update update)
         {
-            if (CommandMatches(update))
+            if (await CommandMatches(update))
             {
                 await ExecuteCommandAsync(update);
                 return CommandMatchResult.Matching;
@@ -19,6 +19,6 @@ namespace WebAPI.Commands
             }
         }
         protected abstract Task ExecuteCommandAsync(Update update);
-        protected abstract bool CommandMatches(Update update);
+        protected abstract Task<bool> CommandMatches(Update update);
     }
 }
