@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Telegram.Bot.Types;
+using Infrastructure.Exceptions;
+using Microsoft.Extensions.Logging;
 
 namespace WebAPI.Commands
 {
@@ -12,12 +14,15 @@ namespace WebAPI.Commands
     {
         private readonly ITelegramClientAdapter _client;
         private readonly IChatRepo _repo;
+        private readonly ILogger<DeleteChatCommand> _logger;
+
         public string ChatIdToBeDeleted { get; private set; }
 
-        public DeleteChatCommand(ITelegramClientAdapter client, IChatRepo repo)
+        public DeleteChatCommand(ITelegramClientAdapter client, IChatRepo repo, ILogger<DeleteChatCommand> logger)
         {
             this._client = client;
             this._repo = repo;
+            this._logger = logger;
         }
         public override string CommandName => "deleteChat";
 
@@ -44,7 +49,18 @@ namespace WebAPI.Commands
 
         protected override async Task ExecuteCommandAsync(Update update)
         {
-            await _repo.DeleteChat(ChatIdToBeDeleted);
+            try
+            {
+                await _repo.DeleteChat(ChatIdToBeDeleted);
+            }
+            catch(ChatDontExistException)
+            {
+                await _client.SendTextMessageAsync(ChatIdToBeDeleted, "This chat is not being traced");
+            }
+            catch(Exception exc)
+            {
+                _logger.LogError(exc, "Were not able to delete chat");
+            }
             await _client.SendTextMessageAsync(ChatIdToBeDeleted, "Successfully deleted chat");
         }
         private bool UserIsAdminInChat(string userId, string chatId)

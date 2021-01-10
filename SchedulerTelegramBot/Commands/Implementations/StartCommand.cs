@@ -1,5 +1,6 @@
 ﻿using Infrastructure.Exceptions;
 using Infrastructure.Repositories;
+using Microsoft.Extensions.Logging;
 using SchedulerTelegramBot.Client;
 using System;
 using System.Threading.Tasks;
@@ -11,11 +12,13 @@ namespace WebAPI.Commands
     {
         private readonly IChatRepo _repo;
         private readonly ITelegramClientAdapter _client;
+        private readonly ILogger<StartCommand> _logger;
         private const string StartupStickerId = @"CAACAgIAAxkBAAMrX_oDjl4RZ7SqvMaNBxaTese356AAAg0AA3EcFxMefvS-UNPkwR4E";
-        public StartCommand(IChatRepo repo, ITelegramClientAdapter client)
+        public StartCommand(IChatRepo repo, ITelegramClientAdapter client, ILogger<StartCommand> logger)
         {
             this._repo = repo;
             this._client = client;
+            this._logger = logger;
         }
         public override string CommandName => "start";
 
@@ -53,8 +56,9 @@ namespace WebAPI.Commands
             {
                 await _client.SendTextMessageAsync(chatId, "Already activated, sorry");
             }
-            catch(Exception)
+            catch(Exception exc)
             {
+                _logger.LogError(exc, "Failed to add chat");
                 throw;
             }
         }

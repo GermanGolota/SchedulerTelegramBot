@@ -7,6 +7,7 @@ using Telegram.Bot.Types;
 using Newtonsoft.Json;
 using Infrastructure.DTOs;
 using WebAPI.Jobs;
+using Microsoft.Extensions.Logging;
 
 namespace WebAPI.Commands
 {
@@ -15,12 +16,15 @@ namespace WebAPI.Commands
         private readonly IChatRepo _repo;
         private readonly ITelegramClientAdapter _client;
         private readonly IJobManager _jobs;
+        private readonly ILogger<SetupCommand> _logger;
 
-        public SetupCommand(IChatRepo repo, ITelegramClientAdapter client, IJobManager jobs)
+        public SetupCommand(IChatRepo repo, ITelegramClientAdapter client, IJobManager jobs, 
+            ILogger<SetupCommand> logger)
         {
             this._repo = repo;
             this._client = client;
             this._jobs = jobs;
+            this._logger = logger;
         }
         public override string CommandName => "setup";
 
@@ -71,8 +75,9 @@ namespace WebAPI.Commands
             {
                 await _client.SendTextMessageAsync(chatId, "Data in the file is not valid");
             }
-            catch(Exception)
+            catch(Exception exc)
             {
+                _logger.LogError(exc, "Were not able to setup jobs");
                 throw;
             }
 
