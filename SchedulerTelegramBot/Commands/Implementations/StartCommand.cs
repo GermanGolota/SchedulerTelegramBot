@@ -26,7 +26,7 @@ namespace WebAPI.Commands
         {
             if (UpdateIsCommand(update))
             {
-                string messageText = update.Message.Text;
+                string messageText = update.Message.Text ?? "";
 
                 if (FirstWordMatchesCommandName(messageText))
                 {
