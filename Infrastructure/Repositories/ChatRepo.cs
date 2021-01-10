@@ -22,7 +22,7 @@ namespace Infrastructure.Repositories
         {
             int chatCount = _context.Chats.Where(x => x.ChatId == chatId).Count();
 
-            if(chatCount == 0)
+            if (chatCount == 0)
             {
                 Chat chat = new Chat
                 {
@@ -39,29 +39,52 @@ namespace Infrastructure.Repositories
             }
         }
 
-        public string GetAdminIdOfChat(string chatId)
+        public async Task DeleteChat(string chatId)
         {
-            var chat = _context.Chats.First(chat => chat.ChatId == chatId);
+            var chat = _context.Chats.Include(x => x.Schedule).Where(x => x.ChatId == chatId).FirstOrDefault();
 
-            if(chat is null)
+            ValidateChatExistance(chat);
+
+            _context.Remove(chat);
+
+            _context.SaveChanges();
+        }
+
+        private void ValidateChatExistance(Chat chat)
+        {
+            if (chat is null)
             {
                 throw new ChatDontExistException();
             }
-
-            return chat.AdminId;
         }
 
-        public List<Alert> GetAlertsOfChat(string chatId)
+        public string GetAdminIdOfChat(string chatId)
         {
-            var chat = _context.Chats.Include(chat=>chat.Schedule).First(chat => chat.ChatId == chatId);
+            var chat = _context.Chats.Where(chat => chat.ChatId == chatId).Select(
+                x =>new
+                {
+                    adminId = x.AdminId
+                }
+            ).FirstOrDefault();
 
             if (chat is null)
             {
                 throw new ChatDontExistException();
             }
 
-            var alerts = _context.Schedules.Include(sch=>sch.Alerts).Where(sch => sch.ScheduleId == chat.ScheduleId)
-                .Select(sch=> sch.Alerts).First();
+            return chat.adminId;
+        }
+        public List<Alert> GetAlertsOfChat(string chatId)
+        {
+            var chat = _context.Chats.Include(chat => chat.Schedule).First(chat => chat.ChatId == chatId);
+
+            if (chat is null)
+            {
+                throw new ChatDontExistException();
+            }
+
+            var alerts = _context.Schedules.Include(sch => sch.Alerts).Where(sch => sch.ScheduleId == chat.ScheduleId)
+                .Select(sch => sch.Alerts).First();
 
             List<Alert> output = alerts.ToList();
 
