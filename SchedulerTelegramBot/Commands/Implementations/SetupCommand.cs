@@ -12,17 +12,15 @@ using Infrastructure.Exceptions;
 
 namespace WebAPI.Commands
 {
-    public class SetupCommand : CommandBase
+    public class SetupCommand : AdminCommandBase
     {
-        private readonly IChatRepo _repo;
         private readonly ITelegramClientAdapter _client;
         private readonly IJobManager _jobs;
         private readonly ILogger<SetupCommand> _logger;
 
         public SetupCommand(IChatRepo repo, ITelegramClientAdapter client, IJobManager jobs, 
-            ILogger<SetupCommand> logger)
+            ILogger<SetupCommand> logger):base(repo)
         {
-            this._repo = repo;
             this._client = client;
             this._jobs = jobs;
             this._logger = logger;
@@ -82,11 +80,6 @@ namespace WebAPI.Commands
                 throw;
             }
 
-        }
-        private bool UserIsAdminInChat(string userId, string chatId)
-        {
-            string adminId = _repo.GetAdminIdOfChat(chatId);
-            return userId.Equals(adminId);
         }
         private async Task<string> GetFileContent(string fileId)
         {

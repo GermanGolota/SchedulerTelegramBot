@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace WebAPI.Commands
 {
-    public class DeleteChatCommand : CommandBase
+    public class DeleteChatCommand : AdminCommandBase
     {
         private readonly ITelegramClientAdapter _client;
         private readonly IChatRepo _repo;
@@ -18,7 +18,7 @@ namespace WebAPI.Commands
 
         public string ChatIdToBeDeleted { get; private set; }
 
-        public DeleteChatCommand(ITelegramClientAdapter client, IChatRepo repo, ILogger<DeleteChatCommand> logger)
+        public DeleteChatCommand(ITelegramClientAdapter client, IChatRepo repo, ILogger<DeleteChatCommand> logger):base(repo)
         {
             this._client = client;
             this._repo = repo;
@@ -62,11 +62,6 @@ namespace WebAPI.Commands
                 _logger.LogError(exc, "Were not able to delete chat");
             }
             await _client.SendTextMessageAsync(ChatIdToBeDeleted, "Successfully deleted chat");
-        }
-        private bool UserIsAdminInChat(string userId, string chatId)
-        {
-            string adminId = _repo.GetAdminIdOfChat(chatId);
-            return userId.Equals(adminId);
         }
     }
 }
