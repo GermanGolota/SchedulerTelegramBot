@@ -1,5 +1,7 @@
-﻿using Infrastructure.Repositories;
+﻿using Infrastructure.Exceptions;
+using Infrastructure.Repositories;
 using SchedulerTelegramBot.Client;
+using System;
 using System.Threading.Tasks;
 using Telegram.Bot.Types;
 
@@ -47,9 +49,13 @@ namespace WebAPI.Commands
 
                 await _client.SendTextMessageAsync(chatId, "Activated");
             }
-            catch
+            catch(ChatAlreadyExistsException)
             {
-                //log
+                await _client.SendTextMessageAsync(chatId, "Already activated, sorry");
+            }
+            catch(Exception)
+            {
+                throw;
             }
         }
     }
