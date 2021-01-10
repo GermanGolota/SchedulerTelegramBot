@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using Infrastructure.DTOs;
 using WebAPI.Jobs;
 using Microsoft.Extensions.Logging;
+using Infrastructure.Exceptions;
 
 namespace WebAPI.Commands
 {
@@ -106,9 +107,13 @@ namespace WebAPI.Commands
 
                 await _client.SendTextMessageAsync(chatId, "Schedule have been succesfully set");
             }
+            catch(ChatDontExistException)
+            {
+                await _client.SendTextMessageAsync(chatId, "This chat is not registered yet");
+            }
             catch (Exception exc)
             {
-                await _client.SendTextMessageAsync(chatId, exc.Message);
+                _logger.LogError(exc, "Failed to add setup jobs");
             }
         }
     }
