@@ -5,6 +5,7 @@ namespace Infrastructure.Repositories
 {
     public interface IScheduleRepo
     {
-        Task TryApplyScheduleToChat(ScheduleModel schedule, string ChatId); 
+        Task TryApplyScheduleToChat(ScheduleModel schedule, string ChatId);
+        Task RemoveScheduleFromChat(string ChatId);
     }
 }

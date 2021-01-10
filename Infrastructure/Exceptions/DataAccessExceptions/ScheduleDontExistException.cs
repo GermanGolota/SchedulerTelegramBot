@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Infrastructure.Exceptions.DataAccessExceptions
+namespace Infrastructure.Exceptions
 {
     public class ScheduleDontExistException:DataAccessException
     {
