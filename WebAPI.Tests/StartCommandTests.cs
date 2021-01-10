@@ -7,6 +7,7 @@ using System;
 using System.Threading.Tasks;
 using Telegram.Bot.Types;
 using WebAPI.Commands;
+using WebAPI.Tests.Mocks;
 using Xunit;
 
 namespace WebAPI.Tests
@@ -16,15 +17,13 @@ namespace WebAPI.Tests
         private readonly StartCommand _sut;
         private readonly Mock<IChatRepo> _repoMock = new Mock<IChatRepo>();
         private readonly Mock<ITelegramClientAdapter> _clientMock = new Mock<ITelegramClientAdapter>();
-        private readonly Mock<ILogger<StartCommand>> _loggerMock = new Mock<ILogger<StartCommand>>();
         private const string TestChatId = "56675";
         private const string StartupStickerId = @"CAACAgIAAxkBAAMrX_oDjl4RZ7SqvMaNBxaTese356AAAg0AA3EcFxMefvS-UNPkwR4E";
         private const string AdminId = "12345";
         private const string SuccessMessage = "Activated";
         public StartCommandTests()
         {
-            _loggerMock.Setup(x => x.LogError(It.IsAny<Exception>(), It.IsAny<string>()));
-           _sut = new StartCommand(_repoMock.Object, _clientMock.Object, _loggerMock.Object);
+           _sut = new StartCommand(_repoMock.Object, _clientMock.Object, new StartCommandLoggerMock());
         }
 
         [Fact]
