@@ -58,7 +58,7 @@ namespace WebAPI.Jobs
                 {
                     string jobId = GenerateJobId(chatId, JobCount);
                     RecurringJob.AddOrUpdate<HangfireActions>(jobId, x=>x.SendAlertMessage(alert.Message, chatId), alert.Cron);
-                    await _alertRepo.UpdateJobId(alert, jobId);
+                    await _alertRepo.UpdateJobId(alert.AlertId, jobId);
                     JobCount++;
                 }
             }
