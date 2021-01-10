@@ -18,6 +18,7 @@ namespace WebAPI.Extensions
         {
             services.AddScoped<StartCommand>();
             services.AddScoped<SetupCommand>();
+            services.AddScoped<DeleteChatCommand>();
 
             services.AddScoped<MessageRepliesContainer>();
 
