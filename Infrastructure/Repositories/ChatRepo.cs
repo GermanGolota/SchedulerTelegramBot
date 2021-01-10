@@ -1,5 +1,6 @@
 ﻿using Core;
 using Core.Entities;
+using Infrastructure.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -34,7 +35,7 @@ namespace Infrastructure.Repositories
             }
             else
             {
-                throw new Exception("This chat is alredy registered");
+                throw new ChatAlreadyExistsException();
             }
         }
 
@@ -44,7 +45,7 @@ namespace Infrastructure.Repositories
 
             if(chat is null)
             {
-                throw new Exception("That chat is not yet in the system");
+                throw new ChatDontExistException();
             }
 
             return chat.AdminId;
@@ -56,7 +57,7 @@ namespace Infrastructure.Repositories
 
             if (chat is null)
             {
-                throw new Exception("That chat is not yet in the system");
+                throw new ChatDontExistException();
             }
 
             var alerts = _context.Schedules.Include(sch=>sch.Alerts).Where(sch => sch.ScheduleId == chat.ScheduleId)
