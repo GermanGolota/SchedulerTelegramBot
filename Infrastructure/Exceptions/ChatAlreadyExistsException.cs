@@ -6,7 +6,7 @@ namespace Infrastructure.Exceptions
 {
     public class ChatAlreadyExistsException:DataAccessException
     {
-        public ChatAlreadyExistsException(string message):base(message)
+        public ChatAlreadyExistsException():base(ExceptionMessages.ChatExistsMessage)
         {
 
         }
