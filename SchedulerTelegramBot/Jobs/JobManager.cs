@@ -24,6 +24,26 @@ namespace WebAPI.Jobs
             this._alertRepo = alert;
         }
 
+        public async Task DeleteJobsFromChat(ChatId chatId)
+        {
+            List<Alert> alerts = _chatRepo.GetAlertsOfChat(chatId);
+
+            foreach (Alert alert in alerts)
+            {
+                string jobId = alert.JobId;
+                RecurringJob.RemoveIfExists(jobId);
+            }
+
+            try
+            {
+                await _scheduleRepo.RemoveScheduleFromChat(chatId);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         public async Task SetupJobsForChat(ScheduleModel model, ChatId chat)
         {
             try

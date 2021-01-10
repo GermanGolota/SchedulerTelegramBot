@@ -7,5 +7,6 @@ namespace WebAPI.Jobs
     public interface IJobManager
     {
         Task SetupJobsForChat(ScheduleModel model, ChatId chat);
+        Task DeleteJobsFromChat(ChatId chat);
     }
 }
