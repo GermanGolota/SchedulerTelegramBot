@@ -18,7 +18,8 @@ namespace WebAPI.Commands
 
         private string chatIdToBeDeleted;
 
-        public DeleteChatCommand(ITelegramClientAdapter client, IChatRepo repo, ILogger<DeleteChatCommand> logger):base(repo)
+        public DeleteChatCommand(ITelegramClientAdapter client,
+            IChatRepo repo, ILogger<DeleteChatCommand> logger):base(repo)
         {
             this._client = client;
             this._repo = repo;
