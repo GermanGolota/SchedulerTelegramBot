@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace WebAPI.Tests
+namespace SchedulerTelegramBot.Tests
 {
     public class CroneVerifierTests
     {

@@ -11,7 +11,7 @@ using WebAPI.Commands;
 using WebAPI.Tests.Mocks;
 using Xunit;
 
-namespace WebAPI.Tests
+namespace SchedulerTelegramBot.Tests
 {
     public class StartCommandTests:CommandTestBase
     {
