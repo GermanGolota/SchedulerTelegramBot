@@ -8,7 +8,6 @@ using System;
 using System.Threading.Tasks;
 using Telegram.Bot.Types;
 using WebAPI.Commands;
-using WebAPI.Tests.Mocks;
 using Xunit;
 
 namespace SchedulerTelegramBot.Tests

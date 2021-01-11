@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WebAPI.Commands;
 
-namespace WebAPI.Tests.Mocks
+namespace SchedulerTelegramBot.Tests.Mocks
 {
     public class LoggerMock<T> : ILogger<T>
     {
