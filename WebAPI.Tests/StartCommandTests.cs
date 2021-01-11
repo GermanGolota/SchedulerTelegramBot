@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using SchedulerTelegramBot.Client;
 using SchedulerTelegramBot.Tests;
+using SchedulerTelegramBot.Tests.Mocks;
 using System;
 using System.Threading.Tasks;
 using Telegram.Bot.Types;
