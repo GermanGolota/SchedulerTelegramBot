@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{8DEC1D85-A415-4994-B617-8981D1371AE4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAPI.Tests", "WebAPI.Tests\WebAPI.Tests.csproj", "{249087FE-9190-4584-B8E3-2F2F6C9F9922}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchedulerTelegramBot.Tests", "WebAPI.Tests\SchedulerTelegramBot.Tests.csproj", "{249087FE-9190-4584-B8E3-2F2F6C9F9922}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
