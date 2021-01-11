@@ -16,7 +16,7 @@ namespace WebAPI.Commands
         private readonly IChatRepo _repo;
         private readonly ILogger<DeleteChatCommand> _logger;
 
-        public string ChatIdToBeDeleted { get; private set; }
+        private string chatIdToBeDeleted;
 
         public DeleteChatCommand(ITelegramClientAdapter client, IChatRepo repo, ILogger<DeleteChatCommand> logger):base(repo)
         {
@@ -34,11 +34,11 @@ namespace WebAPI.Commands
                 string messageText = message.Text;
                 if (FirstWordMatchesCommandName(messageText))
                 {
-                    ChatIdToBeDeleted = message.Chat.Id.ToString();
+                    chatIdToBeDeleted = message.Chat.Id.ToString();
                     string userId = message.From.Id.ToString();
-                    if (!UserIsAdminInChat(userId, ChatIdToBeDeleted))
+                    if (!UserIsAdminInChat(userId, chatIdToBeDeleted))
                     {
-                        await _client.SendTextMessageAsync(ChatIdToBeDeleted, 
+                        await _client.SendTextMessageAsync(chatIdToBeDeleted, 
                             StandardMessages.PermissionDenied);
                         return false;
                     }
@@ -52,13 +52,13 @@ namespace WebAPI.Commands
         {
             try
             {
-                await _repo.DeleteChat(ChatIdToBeDeleted);
+                await _repo.DeleteChat(chatIdToBeDeleted);
 
-                await _client.SendTextMessageAsync(ChatIdToBeDeleted, StandardMessages.ChatDeletionSuccess);
+                await _client.SendTextMessageAsync(chatIdToBeDeleted, StandardMessages.ChatDeletionSuccess);
             }
             catch(DataAccessException exc)
             {
-                await _client.SendTextMessageAsync(ChatIdToBeDeleted, exc.Message);
+                await _client.SendTextMessageAsync(chatIdToBeDeleted, exc.Message);
             }
             catch(Exception exc)
             {
