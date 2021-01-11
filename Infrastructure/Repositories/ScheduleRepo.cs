@@ -1,4 +1,5 @@
 ﻿using Core;
+using Core.Entities;
 using Infrastructure.DTOs;
 using Infrastructure.Exceptions;
 using Infrastructure.Parsers;
@@ -13,13 +14,11 @@ namespace Infrastructure.Repositories
     public class ScheduleRepo : IScheduleRepo
     {
         private readonly SchedulesContext _context;
-        private readonly IModelConverter _converter;
         private readonly ICroneVerifier _croneVerifier;
 
-        public ScheduleRepo(SchedulesContext context, IModelConverter converter, ICroneVerifier croneVerifier)
+        public ScheduleRepo(SchedulesContext context, ICroneVerifier croneVerifier)
         {
             this._context = context;
-            this._converter = converter;
             this._croneVerifier = croneVerifier;
         }
 
@@ -48,7 +47,7 @@ namespace Infrastructure.Repositories
             _context.SaveChanges();
         }
 
-        public async Task TryApplyScheduleToChat(ScheduleModel scheduleDTO, string ChatId)
+        public async Task TryApplyScheduleToChat(Schedule schedule, string ChatId)
         {
             var chat = await _context.Chats.FirstAsync(chat => chat.ChatId == ChatId);
             if (chat is null)
@@ -57,10 +56,9 @@ namespace Infrastructure.Repositories
             }
             if (chat.Schedule is null)
             {
-                var alerts = scheduleDTO.Alerts;
+                var alerts = schedule.Alerts;
                 if (ConsistsOfProperCrons(alerts))
                 {
-                    var schedule = _converter.ConvertScheduleFromDTO(scheduleDTO);
                     chat.Schedule = schedule;
                 }
                 else
@@ -74,9 +72,9 @@ namespace Infrastructure.Repositories
             }
             _context.SaveChanges();
         }
-        private bool ConsistsOfProperCrons(List<AlertModel> alerts)
+        private bool ConsistsOfProperCrons(IEnumerable<Alert> alerts)
         {
-            foreach (AlertModel alert in alerts)
+            foreach (Alert alert in alerts)
             {
                 bool validCron = _croneVerifier.VerifyCron(alert.Cron);
                 bool notValidCron = !validCron;
