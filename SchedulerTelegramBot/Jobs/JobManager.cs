@@ -15,15 +15,13 @@ namespace WebAPI.Jobs
     {
         private readonly IScheduleRepo _scheduleRepo;
         private readonly IChatRepo _chatRepo;
-        private readonly IAlertRepo _alertRepo;
         private readonly IModelConverter _converter;
 
-        public JobManager(IScheduleRepo schedule, IChatRepo chat, IAlertRepo alert, 
+        public JobManager(IScheduleRepo schedule, IChatRepo chat,
             IModelConverter converter)
         {
             this._scheduleRepo = schedule;
             this._chatRepo = chat;
-            this._alertRepo = alert;
             this._converter = converter;
         }
 
