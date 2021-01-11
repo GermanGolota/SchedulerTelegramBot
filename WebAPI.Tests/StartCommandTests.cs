@@ -20,7 +20,7 @@ namespace WebAPI.Tests
         private const string TestChatId = "56675";
         private const string StartupStickerId = @"CAACAgIAAxkBAAMrX_oDjl4RZ7SqvMaNBxaTese356AAAg0AA3EcFxMefvS-UNPkwR4E";
         private const string AdminId = "12345";
-        private const string SuccessMessage = "Activated";
+        private string SuccessMessage = StandardMessages.ChatRegistration;
         public StartCommandTests()
         {
            _sut = new StartCommand(_repoMock.Object, _clientMock.Object, new StartCommandLoggerMock());
