@@ -3,6 +3,7 @@ using Infrastructure.Repositories;
 using Microsoft.Extensions.Logging;
 using Moq;
 using SchedulerTelegramBot.Client;
+using SchedulerTelegramBot.Tests;
 using System;
 using System.Threading.Tasks;
 using Telegram.Bot.Types;
@@ -12,11 +13,10 @@ using Xunit;
 
 namespace WebAPI.Tests
 {
-    public class StartCommandTests
+    public class StartCommandTests:CommandTestBase
     {
         private readonly StartCommand _sut;
         private readonly Mock<IChatRepo> _repoMock = new Mock<IChatRepo>();
-        private readonly Mock<ITelegramClientAdapter> _clientMock = new Mock<ITelegramClientAdapter>();
         private const string TestChatId = "56675";
         private const string StartupStickerId = @"CAACAgIAAxkBAAMrX_oDjl4RZ7SqvMaNBxaTese356AAAg0AA3EcFxMefvS-UNPkwR4E";
         private const string AdminId = "12345";
@@ -84,11 +84,6 @@ namespace WebAPI.Tests
             await _sut.ExecuteCommandIfMatched(update);
             //Assert
             AssertMessageBeenSendOnce();
-        }
-        private void SetupClientMock()
-        {
-            _clientMock.Setup(x => x.SendTextMessageAsync(It.IsAny<ChatId>(), It.IsAny<string>()));
-            _clientMock.Setup(x => x.SendStickerAsync(It.IsAny<ChatId>(), It.IsAny<string>()));
         }
         private void SetupRepoToContainChat()
         {
