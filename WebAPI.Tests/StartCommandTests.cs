@@ -23,7 +23,7 @@ namespace WebAPI.Tests
         private string SuccessMessage = StandardMessages.ChatRegistration;
         public StartCommandTests()
         {
-           _sut = new StartCommand(_repoMock.Object, _clientMock.Object, new StartCommandLoggerMock());
+           _sut = new StartCommand(_repoMock.Object, _clientMock.Object, new LoggerMock<StartCommand>());
         }
 
         [Fact]

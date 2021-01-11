@@ -8,7 +8,7 @@ using WebAPI.Commands;
 
 namespace WebAPI.Tests.Mocks
 {
-    public class StartCommandLoggerMock : ILogger<StartCommand>
+    public class LoggerMock<T> : ILogger<T>
     {
         public IDisposable BeginScope<TState>(TState state)
         {
