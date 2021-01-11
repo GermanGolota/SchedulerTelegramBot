@@ -39,7 +39,7 @@ namespace WebAPI.Commands
                     string userId = message.From.Id.ToString();
                     if (!UserIsAdminInChat(userId, chatId))
                     {
-                        await _client.SendTextMessageAsync(chatId, "You don't have permission to do that");
+                        await _client.SendTextMessageAsync(chatId, StandardMessages.PermissionDenied);
                         return false;
                     }
                     return true;
@@ -57,7 +57,7 @@ namespace WebAPI.Commands
             var document = message.Document;
             if (document is null)
             {
-                await _client.SendTextMessageAsync(chatId, "Please attach a file");
+                await _client.SendTextMessageAsync(chatId, StandardMessages.NoFileAttached);
                 return;
             }
 
@@ -69,10 +69,12 @@ namespace WebAPI.Commands
             {
                 var model = JsonConvert.DeserializeObject<ScheduleModel>(fileContent);
                 await SetupJobs(model, chatId);
+
+                await _client.SendTextMessageAsync(chatId, StandardMessages.ScheduleSetSuccess);
             }
             catch (JsonException)
             {
-                await _client.SendTextMessageAsync(chatId, "Data in the file is not valid");
+                await _client.SendTextMessageAsync(chatId, StandardMessages.BadFileData);
             }
             catch (DataAccessException exc)
             {
@@ -100,9 +102,6 @@ namespace WebAPI.Commands
         private async Task SetupJobs(ScheduleModel model, string chatId)
         {
             await _jobs.SetupJobsForChat(model, chatId);
-
-            await _client.SendTextMessageAsync(chatId, "Schedule have been succesfully set");
-
         }
     }
 }

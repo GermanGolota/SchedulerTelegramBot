@@ -38,7 +38,8 @@ namespace WebAPI.Commands
                     string userId = message.From.Id.ToString();
                     if (!UserIsAdminInChat(userId, ChatIdToBeDeleted))
                     {
-                        await _client.SendTextMessageAsync(ChatIdToBeDeleted, "You don't have permission to do that");
+                        await _client.SendTextMessageAsync(ChatIdToBeDeleted, 
+                            StandardMessages.PermissionDenied);
                         return false;
                     }
                     return true;
@@ -53,7 +54,7 @@ namespace WebAPI.Commands
             {
                 await _repo.DeleteChat(ChatIdToBeDeleted);
 
-                await _client.SendTextMessageAsync(ChatIdToBeDeleted, "Successfully deleted chat");
+                await _client.SendTextMessageAsync(ChatIdToBeDeleted, StandardMessages.ChatDeletionSuccess);
             }
             catch(DataAccessException exc)
             {

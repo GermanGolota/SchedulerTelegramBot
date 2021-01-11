@@ -50,7 +50,7 @@ namespace WebAPI.Commands
 
                 await _client.SendStickerAsync(chatId, StartupStickerId);
 
-                await _client.SendTextMessageAsync(chatId, "Activated");
+                await _client.SendTextMessageAsync(chatId, StandardMessages.ChatRegistration);
             }
             catch(DataAccessException exc)
             {
