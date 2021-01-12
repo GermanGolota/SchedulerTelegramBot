@@ -13,7 +13,7 @@ using Xunit;
 
 namespace SchedulerTelegramBot.Tests
 {
-    public class StartCommandTests:CommandTestBase
+    public class StartCommandTests : CommandTestBase
     {
         private readonly StartCommand _sut;
         private readonly Mock<IChatRepo> _repoMock = new Mock<IChatRepo>();
@@ -21,7 +21,7 @@ namespace SchedulerTelegramBot.Tests
         private string SuccessMessage = StandardMessages.ChatRegistration;
         public StartCommandTests()
         {
-           _sut = new StartCommand(_repoMock.Object, _clientMock.Object, new LoggerMock<StartCommand>());
+            _sut = new StartCommand(_repoMock.Object, _clientMock.Object, new LoggerMock<StartCommand>());
         }
 
         [Fact]
@@ -35,9 +35,9 @@ namespace SchedulerTelegramBot.Tests
             Update update = GetUpdateWithMatchingCommand();
             //Act
 
-            var replie = await _sut.ExecuteCommandIfMatched(update);
+            var actual = await _sut.ExecuteCommandIfMatched(update);
             //Assert    
-            Assert.Equal(CommandMatchResult.Matching,replie);
+            AssertCommandMatched(actual);
         }
         [Fact]
         public async Task ExecuteCommandIfMatched_CommandNotMatches_NotValidUpdate()
@@ -50,9 +50,9 @@ namespace SchedulerTelegramBot.Tests
             Update update = GetUpdateWithNotMatchingCommand();
             //Act
 
-            var replie = await _sut.ExecuteCommandIfMatched(update);
+            var actual = await _sut.ExecuteCommandIfMatched(update);
             //Assert    
-            Assert.Equal(CommandMatchResult.NotMatching, replie);
+            AssertCommandNotMatched(actual);
         }
 
         [Fact]
