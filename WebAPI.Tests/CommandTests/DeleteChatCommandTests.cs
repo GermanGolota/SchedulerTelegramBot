@@ -13,8 +13,6 @@ namespace SchedulerTelegramBot.Tests
     public class DeleteChatCommandTests : CommandTestBase
     {
         private DeleteChatCommand _sut;
-        private const string TestChatId = "567";
-        private const string AdminId = "1234";
         private readonly Mock<IChatRepo> _repoMock = new Mock<IChatRepo>();
         private string SuccessMessage = StandardMessages.ChatDeletionSuccess;
         public DeleteChatCommandTests()
@@ -26,7 +24,7 @@ namespace SchedulerTelegramBot.Tests
         public async Task ExecuteCommandAsync_ShouldWork_CommandMatches()
         {
             //Arrange
-            SetupClientMock();
+            SetupMessageSendingMock();
 
             SetupRepoToContainChat();
 
@@ -43,7 +41,7 @@ namespace SchedulerTelegramBot.Tests
         public async Task ExecuteCommandAsync_ShouldFail_CommandDontMatch()
         {
             //Arrange
-            SetupClientMock();
+            SetupMessageSendingMock();
 
             SetupRepoToContainChat();
 
@@ -60,7 +58,7 @@ namespace SchedulerTelegramBot.Tests
         public async Task ExecuteCommandAsync_ShouldWork_UserIsAdmin()
         {
             //Arrange
-            SetupClientMock();
+            SetupMessageSendingMock();
 
             SetupRepoToContainChat();
 
@@ -77,7 +75,7 @@ namespace SchedulerTelegramBot.Tests
         public async Task ExecuteCommandAsync_ShouldFail_UserNotAdmin()
         {
             //Arrange
-            SetupClientMock();
+            SetupMessageSendingMock();
 
             SetupRepoToContainChat();
 
@@ -115,7 +113,7 @@ namespace SchedulerTelegramBot.Tests
         public async Task ExecuteCommandAsync_ShouldWork_ChatInSystem()
         {
             //Arrange
-            SetupClientMock();
+            SetupMessageSendingMock();
 
             SetupRepoToContainChat();
 
@@ -133,7 +131,7 @@ namespace SchedulerTelegramBot.Tests
         public async Task ExecuteCommandAsync_ShouldFail_ChatNotInSystem()
         {
             //Arrange
-            SetupClientMock();
+            SetupMessageSendingMock();
 
             SetupRepoToNotContainChat();
 

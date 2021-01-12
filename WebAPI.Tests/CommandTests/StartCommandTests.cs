@@ -17,9 +17,7 @@ namespace SchedulerTelegramBot.Tests
     {
         private readonly StartCommand _sut;
         private readonly Mock<IChatRepo> _repoMock = new Mock<IChatRepo>();
-        private const string TestChatId = "56675";
         private const string StartupStickerId = @"CAACAgIAAxkBAAMrX_oDjl4RZ7SqvMaNBxaTese356AAAg0AA3EcFxMefvS-UNPkwR4E";
-        private const string AdminId = "12345";
         private string SuccessMessage = StandardMessages.ChatRegistration;
         public StartCommandTests()
         {
@@ -30,7 +28,7 @@ namespace SchedulerTelegramBot.Tests
         public async Task ExecuteCommandIfMatched_CommandMatches_ValidUpdate()
         {
             //Arrange
-            SetupClientMock();
+            SetupMessageSendingMock();
 
             SetupRepoToContainChat();
 
@@ -45,7 +43,7 @@ namespace SchedulerTelegramBot.Tests
         public async Task ExecuteCommandIfMatched_CommandNotMatches_NotValidUpdate()
         {
             //Arrange
-            SetupClientMock();
+            SetupMessageSendingMock();
 
             SetupRepoToContainChat();
 
@@ -61,7 +59,7 @@ namespace SchedulerTelegramBot.Tests
         public async Task ExecuteCommandIfMatched_ShouldNotSendMessages_ChatAlreadyExists()
         {
             //Arrange
-            SetupClientMock();
+            SetupMessageSendingMock();
 
             SetupRepoToContainChat();
 
@@ -75,7 +73,7 @@ namespace SchedulerTelegramBot.Tests
         public async Task ExecuteCommandIfMatched_ShouldSendMessages_ChatDontExist()
         {
             //Arrange
-            SetupClientMock();
+            SetupMessageSendingMock();
 
             SetupRepoToNotContainChat();
 
