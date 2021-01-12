@@ -61,26 +61,6 @@ namespace SchedulerTelegramBot.Tests
             //Assert
             Assert.False(result);
         }
-        [Theory]
-        [InlineData("* * 4-2 * *")]
-        [InlineData("53-48 * * *")]
-        public void VerifyCron_ShouldFail_SecondValueOfRangeLessThenFirst(string cron)
-        {
-            //Act
-            bool result = _sut.VerifyCron(cron);
-            //Assert
-            Assert.False(result);
-        }
-        [Theory]
-        [InlineData("* * 4,4-2 * *")]
-        [InlineData("50,52,53-48 * * *")]
-        public void VerifyCron_ShouldFail_SecondValueOfRangeLessThenFirstIncludesSeparator(string cron)
-        {
-            //Act
-            bool result = _sut.VerifyCron(cron);
-            //Assert
-            Assert.False(result);
-        }
         [Fact]
         public void VerifyCron_ShouldWork_AllStarValue()
         {
@@ -125,6 +105,37 @@ namespace SchedulerTelegramBot.Tests
             bool result = _sut.VerifyCron(cron);
             //Assert
             Assert.True(result);
+        }
+
+        [Theory]
+        [InlineData("* * 4-2 * *")]
+        [InlineData("53-48 * * *")]
+        public void VerifyCron_ShouldFail_SecondValueOfRangeLessThenFirst(string cron)
+        {
+            //Act
+            bool result = _sut.VerifyCron(cron);
+            //Assert
+            Assert.False(result);
+        }
+        [Theory]
+        [InlineData("* * 4,4-2 * *")]
+        [InlineData("50,52,53-48 * * *")]
+        public void VerifyCron_ShouldFail_SecondValueOfRangeLessThenFirstIncludesSeparator(string cron)
+        {
+            //Act
+            bool result = _sut.VerifyCron(cron);
+            //Assert
+            Assert.False(result);
+        }
+        [Theory]
+        [InlineData("51 5-21,23-22 * 8 *")]
+        [InlineData("50,51-52,53-48 * * *")]
+        public void VerifyCron_ShouldFail_SecondValueInSecondRangeLessThenFirstOne(string cron)
+        {
+            //Act
+            bool result = _sut.VerifyCron(cron);
+            //Assert
+            Assert.False(result);
         }
     }
 }
