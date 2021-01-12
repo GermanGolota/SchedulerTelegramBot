@@ -35,9 +35,9 @@ namespace SchedulerTelegramBot.Tests
             Update update = GetUpdateWithMatchingCommand();
             //Act
 
-            var actual = await _sut.ExecuteCommandIfMatched(update);
+            var replie = await _sut.ExecuteCommandIfMatched(update);
             //Assert    
-            AssertCommandMatched(actual);
+            Assert.Equal(CommandMatchResult.Matching,replie);
         }
         [Fact]
         public async Task ExecuteCommandIfMatched_CommandNotMatches_NotValidUpdate()
@@ -50,9 +50,9 @@ namespace SchedulerTelegramBot.Tests
             Update update = GetUpdateWithNotMatchingCommand();
             //Act
 
-            var actual = await _sut.ExecuteCommandIfMatched(update);
+            var replie = await _sut.ExecuteCommandIfMatched(update);
             //Assert    
-            AssertCommandNotMatched(actual);
+            Assert.Equal(CommandMatchResult.NotMatching, replie);
         }
 
         [Fact]

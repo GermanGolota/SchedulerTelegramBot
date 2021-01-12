@@ -155,6 +155,14 @@ namespace SchedulerTelegramBot.Tests
             var expectedException = new ChatDontExistException();
             _repoMock.Setup(x => x.DeleteChat(It.IsAny<string>())).Throws(expectedException);
         }
+        private void AssertCommandMatched(CommandMatchResult actual)
+        {
+            Assert.Equal(CommandMatchResult.Matching, actual);
+        }
+        private void AssertCommandNotMatched(CommandMatchResult actual)
+        {
+            Assert.Equal(CommandMatchResult.NotMatching, actual);
+        }
         private Update GetUpdateWithMatchingCommand()
         {
             return new Update
