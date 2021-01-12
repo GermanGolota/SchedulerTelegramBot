@@ -5,9 +5,11 @@ using Microsoft.Extensions.Hosting;
 using SchedulerTelegramBot.Client;
 using SchedulerTelegramBot.Controllers;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Telegram.Bot;
+using Telegram.Bot.Types;
 using WebAPI.Commands;
 
 namespace SchedulerTelegramBot
@@ -39,40 +41,49 @@ namespace SchedulerTelegramBot
                 var provider = scope.ServiceProvider;
                 var client = provider.GetService<ITelegramClientAdapter>();
                 await client.BootUpClient();
-#if DEBUG
-                await GetUpdatesManually(provider);
-#endif
             }
+#if DEBUG
+            Task.Run(() => GetUpdatesManually(host));
+#endif
         }
 #if DEBUG
-        private static async Task GetUpdatesManually(IServiceProvider provider)
+        private static async Task GetUpdatesManually(IHost host)
         {
-            var config = provider.GetService<IConfiguration>();
-            string token = config.GetValue<string>("Token");
-            TelegramBotClient client = new TelegramBotClient(token);
-            await client.DeleteWebhookAsync();
-
-            var repliesContainer = provider.GetService<MessageRepliesContainer>();
-
-            var controller = new MessageController(repliesContainer);
-
-            var initialUpdates = await client.GetUpdatesAsync();
-
-            var lastUpdate = initialUpdates.LastOrDefault();
-
-            int lastUpdateId = lastUpdate?.Id ?? 0;
-
-            while (true)
+            using (var scope = host.Services.CreateScope())
             {
-                var updates = await client.GetUpdatesAsync(offset: lastUpdateId+1);
+                var provider = scope.ServiceProvider;
+                MessageRepliesContainer repliesContainer = provider.GetService<MessageRepliesContainer>();
+                var controller = new MessageController(repliesContainer);
+                var config = provider.GetService<IConfiguration>();
+                string token = config.GetValue<string>("Token");
+                TelegramBotClient client = new TelegramBotClient(token);
+                await client.DeleteWebhookAsync();
 
-                foreach (var update in updates)
+                var initialUpdates = await client.GetUpdatesAsync();
+
+                var lastUpdate = initialUpdates.LastOrDefault();
+
+                int lastUpdateId = lastUpdate?.Id ?? 0;
+
+                while (true)
                 {
-                    await controller.Update(update);
-                    lastUpdateId = update.Id;
-                }
+                    var updates = await client.GetUpdatesAsync(offset: lastUpdateId + 1);
 
-                await Task.Delay(1000);
+                    foreach (var update in updates)
+                    {
+                        try
+                        {
+                            await controller.Update(update);
+                        }
+                        catch (Exception exc)
+                        {
+                            Console.WriteLine(exc.Message);
+                        }
+                        lastUpdateId = update.Id;
+                    }
+
+                    await Task.Delay(1000);
+                }
             }
         }
 #endif
