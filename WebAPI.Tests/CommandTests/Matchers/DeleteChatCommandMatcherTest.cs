@@ -17,13 +17,9 @@ namespace SchedulerTelegramBot.Tests
     {
         public IMatcher<DeleteChatCommand> _sut;
         private readonly Mock<IChatRepo> _repoMock = new Mock<IChatRepo>();
-        private readonly Mock<IJobManager> _jobManager = new Mock<IJobManager>();
-        private readonly Mock<DeleteChatCommand> _commandMock = new Mock<DeleteChatCommand>();
-
-        private const string FileId = "123";
         public DeleteChatCommandMatcherTest()
         {
-            _sut = new DeleteChatCommandMatcher(_commandMock.Object, _repoMock.Object, _clientMock.Object);
+            _sut = new DeleteChatCommandMatcher(_repoMock.Object, _clientMock.Object);
         }
         [Fact]
         public async Task ExecuteCommandAsync_ShouldWork_CommandMatches()

@@ -19,12 +19,11 @@ namespace SchedulerTelegramBot.Tests
     {
         public IMatcher<SetupCommand> _sut;
         private readonly Mock<IChatRepo> _repoMock = new Mock<IChatRepo>();
-        private readonly Mock<SetupCommand> _commandMock = new Mock<SetupCommand>();
 
         private const string FileId = "123";
         public SetupCommandMatcherTests()
         {
-            _sut = new SetupCommandMatcher(_repoMock.Object, _clientMock.Object, _commandMock.Object);
+            _sut = new SetupCommandMatcher(_repoMock.Object, _clientMock.Object);
         }
         [Fact]
         public async Task ExecuteCommandIfMatched_CommandMatches_ValidUpdate()

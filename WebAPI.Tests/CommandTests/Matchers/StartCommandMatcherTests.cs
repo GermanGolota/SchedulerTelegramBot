@@ -5,19 +5,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Telegram.Bot.Types;
 using WebAPI.Commands;
 using WebAPI.Commands.Verifiers;
+using Microsoft.Extensions.DependencyInjection;
 using WebAPI.Jobs;
+using Xunit;
 
 namespace SchedulerTelegramBot.Tests.CommandTests.Matchers
 {
     public class StartCommandMatcherTests:CommandMatcherTestBase
     {
         public IMatcher<StartCommand> _sut;
-        private readonly Mock<StartCommand> _commandMock = new Mock<StartCommand>();
         public StartCommandMatcherTests()
         {
-            _sut = new StartCommandMatcher(_commandMock.Object);
+            
+            _sut = new StartCommandMatcher();
         }
         [Fact]
         public async Task ExecuteCommandIfMatched_CommandMatches_ValidUpdate()
@@ -25,12 +28,10 @@ namespace SchedulerTelegramBot.Tests.CommandTests.Matchers
             //Arrange
             SetupMessageSendingMock();
 
-            SetupRepoToContainChat();
-
             Update update = GetUpdateWithMatchingCommand();
             //Act
 
-            var actual = await _sut.ExecuteCommandIfMatched(update);
+            var actual = await _sut.IsMatching(update);
             //Assert    
             AssertCommandMatched(actual);
         }
@@ -40,67 +41,15 @@ namespace SchedulerTelegramBot.Tests.CommandTests.Matchers
             //Arrange
             SetupMessageSendingMock();
 
-            SetupRepoToContainChat();
-
             Update update = GetUpdateWithNotMatchingCommand();
             //Act
 
-            var actual = await _sut.ExecuteCommandIfMatched(update);
+            var actual = await _sut.IsMatching(update);
             //Assert    
             AssertCommandNotMatched(actual);
         }
 
-        [Fact]
-        public async Task ExecuteCommandIfMatched_ShouldNotSendMessages_ChatAlreadyExists()
-        {
-            //Arrange
-            SetupMessageSendingMock();
-
-            SetupRepoToContainChat();
-
-            Update update = GetUpdateWithMatchingCommand();
-            //Act
-            await _sut.ExecuteCommandIfMatched(update);
-            //Assert
-            AssertMessageNotBeenSend();
-        }
-        [Fact]
-        public async Task ExecuteCommandIfMatched_ShouldSendMessages_ChatDontExist()
-        {
-            //Arrange
-            SetupMessageSendingMock();
-
-            SetupRepoToNotContainChat();
-
-            Update update = GetUpdateWithMatchingCommand();
-            //Act
-            await _sut.ExecuteCommandIfMatched(update);
-            //Assert
-            AssertMessageBeenSendOnce();
-        }
-        private void SetupRepoToContainChat()
-        {
-            var expectedException = new ChatAlreadyExistsException();
-            _repoMock.Setup(x => x.AddChat(TestChatId, AdminId)).ThrowsAsync(expectedException);
-
-        }
-        private void SetupRepoToNotContainChat()
-        {
-            _repoMock.Setup(x => x.AddChat(TestChatId, AdminId));
-
-        }
-        private void AssertMessageBeenSendOnce()
-        {
-            _clientMock.Verify(x => x.SendTextMessageAsync(It.IsAny<ChatId>(), It.IsAny<string>()), Times.Once);
-
-            _clientMock.Verify(x => x.SendStickerAsync(It.IsAny<ChatId>(), It.IsAny<string>()), Times.Once);
-        }
-        private void AssertMessageNotBeenSend()
-        {
-            _clientMock.Verify(x => x.SendStickerAsync(TestChatId, StartupStickerId), Times.Never);
-            _clientMock.Verify(x => x.SendTextMessageAsync(TestChatId, SuccessMessage), Times.Never);
-        }
-
+       
         private Update GetUpdateWithMatchingCommand()
         {
             return new Update
