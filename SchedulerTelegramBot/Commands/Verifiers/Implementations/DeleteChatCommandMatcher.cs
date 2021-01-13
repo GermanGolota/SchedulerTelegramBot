@@ -13,7 +13,7 @@ namespace WebAPI.Commands.Verifiers
         private readonly ITelegramClientAdapter _client;
 
         private string commandName = "deleteChat";
-        public DeleteChatCommandMatcher(DeleteChatCommand command, IChatRepo repo, ITelegramClientAdapter client) :base(command, repo)
+        public DeleteChatCommandMatcher(IChatRepo repo, ITelegramClientAdapter client) :base( repo)
         {
             this._client = client;
         }

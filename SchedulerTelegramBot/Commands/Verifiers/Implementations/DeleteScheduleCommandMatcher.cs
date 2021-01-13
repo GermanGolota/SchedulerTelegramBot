@@ -13,7 +13,7 @@ namespace WebAPI.Commands.Verifiers
         private readonly ITelegramClientAdapter _client;
 
         private string commandName = "deleteSchedule";
-        public DeleteScheduleCommandMatcher(DeleteScheduleCommand command, IChatRepo repo, ITelegramClientAdapter client)
+        public DeleteScheduleCommandMatcher(IChatRepo repo, ITelegramClientAdapter client):base(repo)
         {
             this._client = client;
         }

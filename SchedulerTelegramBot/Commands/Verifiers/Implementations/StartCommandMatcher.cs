@@ -11,7 +11,7 @@ namespace WebAPI.Commands.Verifiers
     {
 
         private string commandName = "start";
-        public StartCommandMatcher(StartCommand command)
+        public StartCommandMatcher()
         {
         }
         public override async Task<bool> IsMatching(Update update)

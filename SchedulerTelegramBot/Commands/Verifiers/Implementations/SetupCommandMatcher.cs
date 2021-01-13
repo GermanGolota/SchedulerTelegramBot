@@ -9,7 +9,7 @@ namespace WebAPI.Commands.Verifiers
     {
         private readonly ITelegramClientAdapter _client;
         private string commandName = "setup";
-        public SetupCommandMatcher(IChatRepo repo, ITelegramClientAdapter client, SetupCommand command) : base(command, repo)
+        public SetupCommandMatcher(IChatRepo repo, ITelegramClientAdapter client) : base(repo)
         {
             this._client = client;
         }
