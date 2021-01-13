@@ -49,7 +49,7 @@ namespace SchedulerTelegramBot.Tests
             _repoMock.Setup(x => x.GetAdminIdOfChat(It.IsAny<string>())).Returns("Not" + AdminId);
         }
         [Fact]
-        public async Task ExecuteCommandIfMatched_CommandNotMatches_NotValidUpdate()
+        public async Task IsMatching_CommandNotMatches_NotValidUpdate()
         {
             //Arrange
             SetupMessageSendingMock();
@@ -64,7 +64,7 @@ namespace SchedulerTelegramBot.Tests
             AssertCommandNotMatched(actual);
         }
         [Fact]
-        public async Task ExecuteCommandIfMatched_ShouldFail_UserNotAdmin()
+        public async Task IsMatching_ShouldFail_UserNotAdmin()
         {
             //Arrange
             SetupMessageSendingMock();

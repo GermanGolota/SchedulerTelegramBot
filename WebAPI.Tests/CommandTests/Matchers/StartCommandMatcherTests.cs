@@ -23,7 +23,7 @@ namespace SchedulerTelegramBot.Tests.CommandTests.Matchers
             _sut = new StartCommandMatcher();
         }
         [Fact]
-        public async Task ExecuteCommandIfMatched_CommandMatches_ValidUpdate()
+        public async Task IsMatching_CommandMatches_ValidUpdate()
         {
             //Arrange
             SetupMessageSendingMock();
@@ -36,7 +36,7 @@ namespace SchedulerTelegramBot.Tests.CommandTests.Matchers
             AssertCommandMatched(actual);
         }
         [Fact]
-        public async Task ExecuteCommandIfMatched_CommandNotMatches_NotValidUpdate()
+        public async Task IsMatching_CommandNotMatches_NotValidUpdate()
         {
             //Arrange
             SetupMessageSendingMock();

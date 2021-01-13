@@ -22,7 +22,7 @@ namespace SchedulerTelegramBot.Tests
             _sut = new DeleteChatCommandMatcher(_repoMock.Object, _clientMock.Object);
         }
         [Fact]
-        public async Task ExecuteCommandAsync_ShouldWork_CommandMatches()
+        public async Task IsMatching_ShouldWork_CommandMatches()
         {
             //Arrange
             SetupMessageSendingMock();
@@ -36,7 +36,7 @@ namespace SchedulerTelegramBot.Tests
             AssertCommandMatched(actual);
         }
         [Fact]
-        public async Task ExecuteCommandAsync_ShouldFail_CommandDontMatch()
+        public async Task IsMatching_ShouldFail_CommandDontMatch()
         {
             //Arrange
             SetupMessageSendingMock();
@@ -50,7 +50,7 @@ namespace SchedulerTelegramBot.Tests
             AssertCommandNotMatched(actual);
         }
         [Fact]
-        public async Task ExecuteCommandAsync_ShouldWork_UserIsAdmin()
+        public async Task IsMatching_ShouldWork_UserIsAdmin()
         {
             //Arrange
             SetupMessageSendingMock();
@@ -64,7 +64,7 @@ namespace SchedulerTelegramBot.Tests
             AssertCommandMatched(actual);
         }
         [Fact]
-        public async Task ExecuteCommandAsync_ShouldFail_UserNotAdmin()
+        public async Task IsMatching_ShouldFail_UserNotAdmin()
         {
             //Arrange
             SetupMessageSendingMock();
