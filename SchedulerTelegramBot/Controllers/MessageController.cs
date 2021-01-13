@@ -8,9 +8,9 @@ namespace SchedulerTelegramBot.Controllers
     [ApiController]
     public class MessageController : ControllerBase
     {
-        private readonly MessageRepliesContainer _container;
+        private readonly CommandsContainer _container;
 
-        public MessageController(MessageRepliesContainer container)
+        public MessageController(CommandsContainer container)
         {
             this._container = container;
         }

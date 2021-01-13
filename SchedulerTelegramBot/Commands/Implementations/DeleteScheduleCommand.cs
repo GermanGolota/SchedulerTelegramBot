@@ -12,7 +12,7 @@ using WebAPI.Jobs;
 
 namespace WebAPI.Commands
 {
-    public class DeleteScheduleCommand : MessageReplyBase
+    public class DeleteScheduleCommand : CommandBase
     {
         private readonly IMatcher<DeleteScheduleCommand> _matcher;
         private readonly ITelegramClientAdapter _client;

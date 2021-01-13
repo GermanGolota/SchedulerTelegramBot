@@ -2,10 +2,10 @@
 
 namespace WebAPI.Commands
 {
-    public class MessageRepliesContainer
+    public class CommandsContainer
     {
-        private readonly List<MessageReplyBase> messageReplies = new List<MessageReplyBase>();
-        public MessageRepliesContainer(StartCommand start, SetupCommand setup, DeleteChatCommand delete,
+        private readonly List<CommandBase> messageReplies = new List<CommandBase>();
+        public CommandsContainer(StartCommand start, SetupCommand setup, DeleteChatCommand delete,
             DeleteScheduleCommand schDelete)
         {
             messageReplies.Add(start);
@@ -13,7 +13,7 @@ namespace WebAPI.Commands
             messageReplies.Add(delete);
             messageReplies.Add(schDelete);
         }
-        public IReadOnlyList<MessageReplyBase> GetMessageReplies()
+        public IReadOnlyList<CommandBase> GetMessageReplies()
         {
             return messageReplies.AsReadOnly();
         }

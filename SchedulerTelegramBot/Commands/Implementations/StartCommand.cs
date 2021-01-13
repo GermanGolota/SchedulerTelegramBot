@@ -9,7 +9,7 @@ using WebAPI.Commands.Verifiers;
 
 namespace WebAPI.Commands
 {
-    public class StartCommand : MessageReplyBase
+    public class StartCommand : CommandBase
     {
         private readonly IMatcher<StartCommand> _matcher;
         private readonly IChatRepo _repo;

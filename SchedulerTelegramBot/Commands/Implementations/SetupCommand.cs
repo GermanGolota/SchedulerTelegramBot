@@ -13,7 +13,7 @@ using WebAPI.Commands.Verifiers;
 
 namespace WebAPI.Commands
 {
-    public class SetupCommand : MessageReplyBase
+    public class SetupCommand : CommandBase
     {
         private readonly IMatcher<SetupCommand> _matcher;
         private readonly ITelegramClientAdapter _client;

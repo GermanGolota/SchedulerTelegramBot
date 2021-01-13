@@ -27,7 +27,7 @@ namespace WebAPI.Extensions
             services.AddScoped<IMatcher<DeleteChatCommand>, DeleteChatCommandMatcher>();
             services.AddScoped<IMatcher<DeleteScheduleCommand>, DeleteScheduleCommandMatcher>();
 
-            services.AddScoped<MessageRepliesContainer>();
+            services.AddScoped<CommandsContainer>();
 
             return services;
         }

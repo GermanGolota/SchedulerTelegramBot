@@ -3,7 +3,7 @@ using Telegram.Bot.Types;
 
 namespace WebAPI.Commands
 {
-    public abstract class MessageReplyBase
+    public abstract class CommandBase
     {
         public async Task<CommandMatchResult> ExecuteCommandIfMatched(Update update)
         {

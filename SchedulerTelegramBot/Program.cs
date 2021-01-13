@@ -52,7 +52,7 @@ namespace SchedulerTelegramBot
             using (var scope = host.Services.CreateScope())
             {
                 var provider = scope.ServiceProvider;
-                MessageRepliesContainer repliesContainer = provider.GetService<MessageRepliesContainer>();
+                CommandsContainer repliesContainer = provider.GetService<CommandsContainer>();
                 var controller = new MessageController(repliesContainer);
                 var config = provider.GetService<IConfiguration>();
                 string token = config.GetValue<string>("Token");

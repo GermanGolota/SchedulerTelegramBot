@@ -11,7 +11,7 @@ using WebAPI.Commands.Verifiers;
 
 namespace WebAPI.Commands
 {
-    public class DeleteChatCommand : MessageReplyBase
+    public class DeleteChatCommand : CommandBase
     {
         private readonly IMatcher<DeleteChatCommand> _matcher;
         private readonly ITelegramClientAdapter _client;

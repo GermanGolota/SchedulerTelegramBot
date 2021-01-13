@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebAPI.Commands.Verifiers
 {
-    public abstract class AdminCommandMatcherBase<T> : RequestMatcherBase<T> where T : MessageReplyBase
+    public abstract class AdminCommandMatcherBase<T> : RequestMatcherBase<T> where T : CommandBase
     {
         private readonly IChatRepo _repo;
 
