@@ -7,19 +7,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Telegram.Bot.Types;
+using WebAPI.Commands.Verifiers;
 using WebAPI.Jobs;
 
 namespace WebAPI.Commands
 {
-    public class DeleteScheduleCommand : AdminCommandBase
+    public class DeleteScheduleCommand : MessageReplyBase
     {
+        private readonly IMatcher<DeleteScheduleCommand> _matcher;
         private readonly ITelegramClientAdapter _client;
         private readonly IJobManager _jobs;
         private readonly ILogger<DeleteScheduleCommand> _logger;
 
-        public DeleteScheduleCommand(IChatRepo repo, ITelegramClientAdapter client, IJobManager jobs,
-            ILogger<DeleteScheduleCommand> logger) : base(repo)
+        public DeleteScheduleCommand(IMatcher<DeleteScheduleCommand> matcher, ITelegramClientAdapter client, IJobManager jobs,
+            ILogger<DeleteScheduleCommand> logger)
         {
+            this._matcher = matcher;
             this._client = client;
             this._jobs = jobs;
             this._logger = logger;
@@ -28,23 +31,7 @@ namespace WebAPI.Commands
 
         protected override async Task<bool> CommandMatches(Update update)
         {
-            if (UpdateIsCommand(update))
-            {
-                var message = update.Message;
-                string messageText = message.Text;
-                if (FirstWordMatchesCommandName(messageText))
-                {
-                    var chatId = message.Chat.Id.ToString();
-                    string userId = message.From.Id.ToString();
-                    if (!UserIsAdminInChat(userId, chatId))
-                    {
-                        await _client.SendTextMessageAsync(chatId, StandardMessages.PermissionDenied);
-                        return false;
-                    }
-                    return true;
-                }
-            }
-            return false;
+            return await _matcher.IsMatching(update);
         }
 
         protected override async Task ExecuteCommandAsync(Update update)

@@ -7,20 +7,23 @@ using System.Threading.Tasks;
 using Telegram.Bot.Types;
 using Infrastructure.Exceptions;
 using Microsoft.Extensions.Logging;
+using WebAPI.Commands.Verifiers;
 
 namespace WebAPI.Commands
 {
-    public class DeleteChatCommand : AdminCommandBase
+    public class DeleteChatCommand : MessageReplyBase
     {
+        private readonly IMatcher<DeleteChatCommand> _matcher;
         private readonly ITelegramClientAdapter _client;
         private readonly IChatRepo _repo;
         private readonly ILogger<DeleteChatCommand> _logger;
 
         private string chatIdToBeDeleted;
 
-        public DeleteChatCommand(ITelegramClientAdapter client,
-            IChatRepo repo, ILogger<DeleteChatCommand> logger):base(repo)
+        public DeleteChatCommand(IMatcher<DeleteChatCommand> matcher, ITelegramClientAdapter client,
+            IChatRepo repo, ILogger<DeleteChatCommand> logger)
         {
+            this._matcher = matcher;
             this._client = client;
             this._repo = repo;
             this._logger = logger;
@@ -29,24 +32,7 @@ namespace WebAPI.Commands
 
         protected override async Task<bool> CommandMatches(Update update)
         {
-            if (UpdateIsCommand(update))
-            {
-                var message = update.Message;
-                string messageText = message.Text;
-                if (FirstWordMatchesCommandName(messageText))
-                {
-                    chatIdToBeDeleted = message.Chat.Id.ToString();
-                    string userId = message.From.Id.ToString();
-                    if (!UserIsAdminInChat(userId, chatIdToBeDeleted))
-                    {
-                        await _client.SendTextMessageAsync(chatIdToBeDeleted, 
-                            StandardMessages.PermissionDenied);
-                        return false;
-                    }
-                    return true;
-                }
-            }
-            return false;
+            return await _matcher.IsMatching(update);
         }
 
         protected override async Task ExecuteCommandAsync(Update update)

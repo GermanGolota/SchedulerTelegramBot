@@ -5,17 +5,20 @@ using SchedulerTelegramBot.Client;
 using System;
 using System.Threading.Tasks;
 using Telegram.Bot.Types;
+using WebAPI.Commands.Verifiers;
 
 namespace WebAPI.Commands
 {
-    public class StartCommand : CommandBase
+    public class StartCommand : MessageReplyBase
     {
+        private readonly IMatcher<StartCommand> _matcher;
         private readonly IChatRepo _repo;
         private readonly ITelegramClientAdapter _client;
         private readonly ILogger<StartCommand> _logger;
         private const string StartupStickerId = @"CAACAgIAAxkBAAMrX_oDjl4RZ7SqvMaNBxaTese356AAAg0AA3EcFxMefvS-UNPkwR4E";
-        public StartCommand(IChatRepo repo, ITelegramClientAdapter client, ILogger<StartCommand> logger)
+        public StartCommand(IMatcher<StartCommand> matcher, IChatRepo repo, ITelegramClientAdapter client, ILogger<StartCommand> logger)
         {
+            this._matcher = matcher;
             this._repo = repo;
             this._client = client;
             this._logger = logger;
@@ -24,16 +27,7 @@ namespace WebAPI.Commands
 
         protected override async Task<bool> CommandMatches(Update update)
         {
-            if (UpdateIsCommand(update))
-            {
-                string messageText = update.Message.Text ?? "";
-
-                if (FirstWordMatchesCommandName(messageText))
-                {
-                    return true;
-                }
-            }
-            return false;
+            return await _matcher.IsMatching(update);
         }
 
         protected override async Task ExecuteCommandAsync(Update update)

@@ -9,18 +9,21 @@ using Infrastructure.DTOs;
 using WebAPI.Jobs;
 using Microsoft.Extensions.Logging;
 using Infrastructure.Exceptions;
+using WebAPI.Commands.Verifiers;
 
 namespace WebAPI.Commands
 {
-    public class SetupCommand : AdminCommandBase
+    public class SetupCommand : MessageReplyBase
     {
+        private readonly IMatcher<SetupCommand> _matcher;
         private readonly ITelegramClientAdapter _client;
         private readonly IJobManager _jobs;
         private readonly ILogger<SetupCommand> _logger;
 
-        public SetupCommand(IChatRepo repo, ITelegramClientAdapter client, IJobManager jobs,
-            ILogger<SetupCommand> logger) : base(repo)
+        public SetupCommand(IMatcher<SetupCommand> matcher, ITelegramClientAdapter client, IJobManager jobs,
+            ILogger<SetupCommand> logger)
         {
+            this._matcher = matcher;
             this._client = client;
             this._jobs = jobs;
             this._logger = logger;
@@ -29,23 +32,7 @@ namespace WebAPI.Commands
 
         protected override async Task<bool> CommandMatches(Update update)
         {
-            if (UpdateIsCommand(update))
-            {
-                var message = update.Message;
-                string messageCaption = message.Caption??"";
-                if (FirstWordMatchesCommandName(messageCaption))
-                {
-                    var chatId = message.Chat.Id.ToString();
-                    string userId = message.From.Id.ToString();
-                    if (!UserIsAdminInChat(userId, chatId))
-                    {
-                        await _client.SendTextMessageAsync(chatId, StandardMessages.PermissionDenied);
-                        return false;
-                    }
-                    return true;
-                }
-            }
-            return false;
+            return await _matcher.IsMatching(update);
         }
 
         protected override async Task ExecuteCommandAsync(Update update)
