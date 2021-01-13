@@ -10,7 +10,7 @@ namespace WebAPI.Commands.Verifiers
     {
         private readonly IChatRepo _repo;
 
-        public AdminCommandMatcherBase(MessageReplyBase command, IChatRepo repo):base(command)
+        public AdminCommandMatcherBase(IChatRepo repo)
         {
             this._repo = repo;
         }

@@ -12,6 +12,7 @@ namespace WebAPI.Commands.Verifiers
     {
         private readonly ITelegramClientAdapter _client;
 
+        private string commandName = "deleteChat";
         public DeleteChatCommandMatcher(DeleteChatCommand command, IChatRepo repo, ITelegramClientAdapter client) :base(command, repo)
         {
             this._client = client;
@@ -22,7 +23,7 @@ namespace WebAPI.Commands.Verifiers
             {
                 var message = update.Message;
                 string messageText = message.Text;
-                if (FirstWordMatchesCommandName(messageText))
+                if (FirstWordMatchesCommandName(messageText, commandName))
                 {
                     string chatId = message.Chat.Id.ToString();
                     string userId = message.From.Id.ToString();

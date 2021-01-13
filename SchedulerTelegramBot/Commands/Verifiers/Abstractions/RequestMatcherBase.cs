@@ -9,12 +9,7 @@ namespace WebAPI.Commands.Verifiers
 {
     public abstract class RequestMatcherBase<T>:IMatcher<T> where T : MessageReplyBase
     {
-        public string CommandName { get; }
 
-        public RequestMatcherBase(MessageReplyBase command)
-        {
-            CommandName = command.CommandName;
-        }
         public abstract Task<bool> IsMatching(Update update);
         protected bool UpdateIsCommand(Update update)
         {
@@ -42,13 +37,13 @@ namespace WebAPI.Commands.Verifiers
         {
             return str.StartsWith("/");
         }
-        protected bool FirstWordMatchesCommandName(string str)
+        protected bool FirstWordMatchesCommandName(string str, string commandName)
         {
             string message = str.Replace("/", "");
 
             string firstWord = GetFirstWord(message);
 
-            return StringEqualsName(firstWord);
+            return StringEqualsName(firstWord, commandName);
         }
         private string GetFirstWord(string str)
         {
@@ -68,9 +63,9 @@ namespace WebAPI.Commands.Verifiers
         {
             return str.Contains(" ");
         }
-        private bool StringEqualsName(string str)
+        private bool StringEqualsName(string str, string commandName)
         {
-            int result = String.Compare(str, this.CommandName, ignoreCase: true);
+            int result = String.Compare(str, commandName, ignoreCase: true);
             return result == 0;
         }
     }

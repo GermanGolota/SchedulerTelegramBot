@@ -9,7 +9,9 @@ namespace WebAPI.Commands.Verifiers
 {
     public class StartCommandMatcher : RequestMatcherBase<StartCommand>
     {
-        public StartCommandMatcher(StartCommand command) : base(command)
+
+        private string commandName = "start";
+        public StartCommandMatcher(StartCommand command)
         {
         }
         public override async Task<bool> IsMatching(Update update)
@@ -18,7 +20,7 @@ namespace WebAPI.Commands.Verifiers
             {
                 string messageText = update.Message.Text ?? "";
 
-                if (FirstWordMatchesCommandName(messageText))
+                if (FirstWordMatchesCommandName(messageText, commandName))
                 {
                     return true;
                 }
