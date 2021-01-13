@@ -40,10 +40,12 @@ namespace SchedulerTelegramBot.Tests
 
             SetupRepoToContainChat();
 
+            SetupMatcherVaildCommand();
+
             Update update = GetUpdate();
 
             //Act
-            var actual = await _sut.ExecuteCommandIfMatched(update);
+            await _sut.ExecuteCommandIfMatched(update);
             //Assert
             AssertMessageBeenSend();
         }
@@ -54,6 +56,8 @@ namespace SchedulerTelegramBot.Tests
             SetupMessageSendingMock();
 
             SetupRepoToNotContainChat();
+
+            SetupMatcherVaildCommand();
 
             SetupMatcherValidUpdate();
 
@@ -74,7 +78,10 @@ namespace SchedulerTelegramBot.Tests
         {
             _clientMock.Verify(x => x.SendTextMessageAsync(It.IsAny<ChatId>(), SuccessMessage), Times.Never);
         }
-
+        private void SetupMatcherVaildCommand()
+        {
+            _matcherMock.Setup(x => x.IsMatching(It.IsAny<Update>())).ReturnsAsync(true);
+        }
         private void SetupRepoToNotContainChat()
         {
             var expectedException = new ChatDontExistException();

@@ -34,6 +34,4 @@ namespace SchedulerTelegramBot.Tests
             Assert.False(actual);
         }
     }
-
-   
 }
