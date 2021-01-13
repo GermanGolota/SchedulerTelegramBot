@@ -1,29 +1,24 @@
-using Infrastructure.Exceptions;
-using Infrastructure.Repositories;
-using Microsoft.Extensions.Logging;
+﻿using Infrastructure.Repositories;
 using Moq;
-using SchedulerTelegramBot.Client;
-using SchedulerTelegramBot.Tests;
-using SchedulerTelegramBot.Tests.Mocks;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
-using Telegram.Bot.Types;
 using WebAPI.Commands;
-using Xunit;
+using WebAPI.Commands.Verifiers;
+using WebAPI.Jobs;
 
-namespace SchedulerTelegramBot.Tests
+namespace SchedulerTelegramBot.Tests.CommandTests.Matchers
 {
-    public class StartCommandTests : CommandMatcherTestBase
+    public class StartCommandMatcherTests:CommandMatcherTestBase
     {
-        private readonly StartCommand _sut;
-        private readonly Mock<IChatRepo> _repoMock = new Mock<IChatRepo>();
-        private const string StartupStickerId = @"CAACAgIAAxkBAAMrX_oDjl4RZ7SqvMaNBxaTese356AAAg0AA3EcFxMefvS-UNPkwR4E";
-        private string SuccessMessage = StandardMessages.ChatRegistration;
-        public StartCommandTests()
+        public IMatcher<StartCommand> _sut;
+        private readonly Mock<StartCommand> _commandMock = new Mock<StartCommand>();
+        public StartCommandMatcherTests()
         {
-            _sut = new StartCommand(_repoMock.Object, _clientMock.Object, new LoggerMock<StartCommand>());
+            _sut = new StartCommandMatcher(_commandMock.Object);
         }
-
         [Fact]
         public async Task ExecuteCommandIfMatched_CommandMatches_ValidUpdate()
         {

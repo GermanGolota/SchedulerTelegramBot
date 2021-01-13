@@ -12,7 +12,7 @@ using Xunit;
 namespace SchedulerTelegramBot.Tests
 {
     
-    public class CommandTestBase
+    public class CommandMatcherTestBase
     {
         protected readonly Mock<ITelegramClientAdapter> _clientMock = new Mock<ITelegramClientAdapter>();
 
@@ -25,13 +25,13 @@ namespace SchedulerTelegramBot.Tests
             _clientMock.Setup(x => x.SendStickerAsync(It.IsAny<ChatId>(), It.IsAny<string>()));
         }
 
-        protected void AssertCommandMatched(CommandMatchResult actual)
+        protected void AssertCommandMatched(bool actual)
         {
-            Assert.Equal(CommandMatchResult.Matching, actual);
+            Assert.True(actual);
         }
-        protected void AssertCommandNotMatched(CommandMatchResult actual)
+        protected void AssertCommandNotMatched(bool actual)
         {
-            Assert.Equal(CommandMatchResult.NotMatching, actual);
+            Assert.False(actual);
         }
     }
 

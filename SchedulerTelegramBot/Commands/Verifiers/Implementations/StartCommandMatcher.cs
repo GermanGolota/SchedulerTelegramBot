@@ -9,7 +9,7 @@ namespace WebAPI.Commands.Verifiers
 {
     public class StartCommandMatcher : RequestMatcherBase<StartCommand>
     {
-        public StartCommandMatcher(SetupCommand command) : base(command)
+        public StartCommandMatcher(StartCommand command) : base(command)
         {
         }
         public override async Task<bool> IsMatching(Update update)

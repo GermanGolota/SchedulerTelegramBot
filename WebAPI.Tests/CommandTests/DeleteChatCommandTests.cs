@@ -7,96 +7,20 @@ using Infrastructure.Exceptions;
 using Telegram.Bot.Types;
 using SchedulerTelegramBot.Tests.Mocks;
 using System;
+using WebAPI.Commands.Verifiers;
 
 namespace SchedulerTelegramBot.Tests
 {
-    public class DeleteChatCommandTests : CommandTestBase
+    public class DeleteChatCommandTests : CommandMatcherTestBase
     {
         private DeleteChatCommand _sut;
         private readonly Mock<IChatRepo> _repoMock = new Mock<IChatRepo>();
+        private Mock<IMatcher<DeleteChatCommand>> _matcherMock = new Mock<IMatcher<DeleteChatCommand>>();
         private string SuccessMessage = StandardMessages.ChatDeletionSuccess;
         public DeleteChatCommandTests()
         {
-            _sut = new DeleteChatCommand(_clientMock.Object,
+            _sut = new DeleteChatCommand(_matcherMock.Object,_clientMock.Object,
                 _repoMock.Object, new LoggerMock<DeleteChatCommand>());
-        }
-        [Fact]
-        public async Task ExecuteCommandAsync_ShouldWork_CommandMatches()
-        {
-            //Arrange
-            SetupMessageSendingMock();
-
-            SetupRepoToContainChat();
-
-            SetupRepoUserIsAdmin();
-
-            Update update = GetUpdateWithMatchingCommand();
-            //Act
-            var actual = await _sut.ExecuteCommandIfMatched(update);
-            //Assert
-            AssertMessageBeenSend();
-            AssertCommandMatched(actual);
-        }
-        [Fact]
-        public async Task ExecuteCommandAsync_ShouldFail_CommandDontMatch()
-        {
-            //Arrange
-            SetupMessageSendingMock();
-
-            SetupRepoToContainChat();
-
-            SetupRepoUserIsAdmin();
-
-            Update update = GetUpdateWithNotMatchingCommand();
-            //Act
-            var actual = await _sut.ExecuteCommandIfMatched(update);
-            //Assert
-            AssertMessageNotBeenSend();
-            AssertCommandNotMatched(actual);
-        }
-        [Fact]
-        public async Task ExecuteCommandAsync_ShouldWork_UserIsAdmin()
-        {
-            //Arrange
-            SetupMessageSendingMock();
-
-            SetupRepoToContainChat();
-
-            SetupRepoUserIsAdmin();
-
-            Update update = GetUpdateWithMatchingCommand();
-            //Act
-            var actual = await _sut.ExecuteCommandIfMatched(update);
-            //Assert
-            AssertMessageBeenSend();
-            AssertCommandMatched(actual);
-        }
-        [Fact]
-        public async Task ExecuteCommandAsync_ShouldFail_UserNotAdmin()
-        {
-            //Arrange
-            SetupMessageSendingMock();
-
-            SetupRepoToContainChat();
-
-            SetupRepoUserIsNotAdmin();
-
-            Update update = GetUpdateWithMatchingCommand();
-
-            //Act
-            var actual = await _sut.ExecuteCommandIfMatched(update);
-            //Assert
-            //permission denied message
-            AssertMessageBeenSend();
-            AssertCommandNotMatched(actual);
-        }
-        private void SetupRepoUserIsAdmin()
-        {
-            _repoMock.Setup(x => x.GetAdminIdOfChat(It.IsAny<string>())).Returns(AdminId);
-        }
-        private void SetupRepoUserIsNotAdmin()
-        {
-            _repoMock.Setup(x => x.GetAdminIdOfChat(It.IsAny<string>())).Returns("not" + AdminId);
         }
         private void AssertMessageBeenSend()
         {
@@ -108,7 +32,6 @@ namespace SchedulerTelegramBot.Tests
             _repoMock.Setup(x => x.DeleteChat(It.IsAny<string>()));
         }
 
-
         [Fact]
         public async Task ExecuteCommandAsync_ShouldWork_ChatInSystem()
         {
@@ -117,15 +40,12 @@ namespace SchedulerTelegramBot.Tests
 
             SetupRepoToContainChat();
 
-            SetupRepoUserIsAdmin();
-
-            Update update = GetUpdateWithMatchingCommand();
+            Update update = GetUpdate();
 
             //Act
             var actual = await _sut.ExecuteCommandIfMatched(update);
             //Assert
             AssertMessageBeenSend();
-            AssertCommandMatched(actual);
         }
         [Fact]
         public async Task ExecuteCommandAsync_ShouldFail_ChatNotInSystem()
@@ -135,14 +55,19 @@ namespace SchedulerTelegramBot.Tests
 
             SetupRepoToNotContainChat();
 
-            SetupRepoUserIsAdmin();
+            SetupMatcherValidUpdate();
 
-            Update update = GetUpdateWithMatchingCommand();
+            Update update = GetUpdate();
 
             //Act
             await _sut.ExecuteCommandIfMatched(update);
             //Assert
             AssertMessageNotBeenSend();
+        }
+
+        private void SetupMatcherValidUpdate()
+        {
+            _matcherMock.Setup(x => x.IsMatching(It.IsAny<Update>())).ReturnsAsync(true);
         }
 
         private void AssertMessageNotBeenSend()
@@ -155,31 +80,13 @@ namespace SchedulerTelegramBot.Tests
             var expectedException = new ChatDontExistException();
             _repoMock.Setup(x => x.DeleteChat(It.IsAny<string>())).Throws(expectedException);
         }
-        private Update GetUpdateWithMatchingCommand()
+        private Update GetUpdate()
         {
             return new Update
             {
                 Message = new Message
                 {
                     Text = "/deleteChat",
-                    Chat = new Chat
-                    {
-                        Id = long.Parse(TestChatId)
-                    },
-                    From = new User
-                    {
-                        Id = int.Parse(AdminId)
-                    }
-                }
-            };
-        }
-        private Update GetUpdateWithNotMatchingCommand()
-        {
-            return new Update
-            {
-                Message = new Message
-                {
-                    Text = "/notdeleteChat",
                     Chat = new Chat
                     {
                         Id = long.Parse(TestChatId)
