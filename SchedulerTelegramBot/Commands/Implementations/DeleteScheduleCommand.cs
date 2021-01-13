@@ -27,7 +27,6 @@ namespace WebAPI.Commands
             this._jobs = jobs;
             this._logger = logger;
         }
-        public override string CommandName => "deleteSchedule";
 
         protected override async Task<bool> CommandMatches(Update update)
         {

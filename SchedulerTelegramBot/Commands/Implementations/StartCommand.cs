@@ -23,7 +23,6 @@ namespace WebAPI.Commands
             this._client = client;
             this._logger = logger;
         }
-        public override string CommandName => "start";
 
         protected override async Task<bool> CommandMatches(Update update)
         {

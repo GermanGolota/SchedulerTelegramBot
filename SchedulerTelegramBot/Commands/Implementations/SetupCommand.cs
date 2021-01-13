@@ -28,7 +28,6 @@ namespace WebAPI.Commands
             this._jobs = jobs;
             this._logger = logger;
         }
-        public override string CommandName => "setup";
 
         protected override async Task<bool> CommandMatches(Update update)
         {

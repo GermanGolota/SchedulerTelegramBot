@@ -18,8 +18,6 @@ namespace WebAPI.Commands
         private readonly IChatRepo _repo;
         private readonly ILogger<DeleteChatCommand> _logger;
 
-        private string chatIdToBeDeleted;
-
         public DeleteChatCommand(IMatcher<DeleteChatCommand> matcher, ITelegramClientAdapter client,
             IChatRepo repo, ILogger<DeleteChatCommand> logger)
         {
@@ -28,7 +26,6 @@ namespace WebAPI.Commands
             this._repo = repo;
             this._logger = logger;
         }
-        public override string CommandName => "deleteChat";
 
         protected override async Task<bool> CommandMatches(Update update)
         {
@@ -37,6 +34,8 @@ namespace WebAPI.Commands
 
         protected override async Task ExecuteCommandAsync(Update update)
         {
+
+            string chatIdToBeDeleted = update.Message.Chat.Id.ToString();
             try
             {
                 await _repo.DeleteChat(chatIdToBeDeleted);
