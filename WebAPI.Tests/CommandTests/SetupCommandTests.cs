@@ -37,7 +37,7 @@ namespace SchedulerTelegramBot.Tests
 
             Update update = GetUpdateWithNoFile();
             //Act
-            _sut.ExecuteCommandIfMatched(update);
+            await _sut.ExecuteCommandIfMatched(update);
             //Assert
             AssertJobsNotBeenSet();
         }
@@ -49,7 +49,7 @@ namespace SchedulerTelegramBot.Tests
 
             Update update = GetUpdateWithFile();
             //Act
-            _sut.ExecuteCommandIfMatched(update);
+            await _sut.ExecuteCommandIfMatched(update);
             //Assert
             AssertJobsBeenSet();
         }
