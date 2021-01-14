@@ -1,4 +1,6 @@
+using Core;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -22,7 +24,20 @@ namespace SchedulerTelegramBot
 
             await InitializeTelegramClient(host);
 
+            MigrateDatabase(host);
+
             host.Run();
+        }
+
+        private static void MigrateDatabase(IHost host)
+        {
+            using (var scope = host.Services.CreateScope())
+            {
+                var provider = scope.ServiceProvider;
+                var context = provider.GetRequiredService<SchedulesContext>();
+                context.Database.Migrate();
+
+            }
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args)
