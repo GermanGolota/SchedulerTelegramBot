@@ -1,11 +1,7 @@
 using Infrastructure.Exceptions;
 using Infrastructure.Repositories;
-using Microsoft.Extensions.Logging;
 using Moq;
-using SchedulerTelegramBot.Client;
-using SchedulerTelegramBot.Tests;
 using SchedulerTelegramBot.Tests.Mocks;
-using System;
 using System.Threading.Tasks;
 using Telegram.Bot.Types;
 using WebAPI.Commands;
@@ -14,7 +10,7 @@ using Xunit;
 
 namespace SchedulerTelegramBot.Tests
 {
-    public class StartCommandTests : CommandMatcherTestBase
+    public class StartCommandTests : CommandTestBase
     {
         private readonly StartCommand _sut;
         private readonly Mock<IChatRepo> _repoMock = new Mock<IChatRepo>();

@@ -11,7 +11,7 @@ using WebAPI.Commands.Verifiers;
 
 namespace SchedulerTelegramBot.Tests
 {
-    public class DeleteChatCommandTests : CommandMatcherTestBase
+    public class DeleteChatCommandTests : CommandTestBase
     {
         private DeleteChatCommand _sut;
         private readonly Mock<IChatRepo> _repoMock = new Mock<IChatRepo>();

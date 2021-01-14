@@ -17,7 +17,7 @@ using Xunit;
 
 namespace SchedulerTelegramBot.Tests
 {
-    public class SetupCommandTests : CommandMatcherTestBase
+    public class SetupCommandTests : CommandTestBase
     {
         private SetupCommand _sut;
         private string testingFileLocation = System.IO.Directory.GetCurrentDirectory() + @"\test.json";
