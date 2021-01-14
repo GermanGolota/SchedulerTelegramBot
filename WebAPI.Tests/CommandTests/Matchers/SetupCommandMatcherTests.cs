@@ -42,11 +42,11 @@ namespace SchedulerTelegramBot.Tests
         }
         private void SetupUserIsAdmin()
         {
-            _repoMock.Setup(x => x.GetAdminIdOfChat(It.IsAny<string>())).Returns(AdminId);
+            _repoMock.Setup(x => x.GetAdminIdOfChat(It.IsAny<string>())).Returns(UserId);
         }
         private void SetupUserIsNotAdmin()
         {
-            _repoMock.Setup(x => x.GetAdminIdOfChat(It.IsAny<string>())).Returns("Not" + AdminId);
+            _repoMock.Setup(x => x.GetAdminIdOfChat(It.IsAny<string>())).Returns("Not" + UserId);
         }
         [Fact]
         public async Task IsMatching_CommandNotMatches_NotValidUpdate()
@@ -91,7 +91,7 @@ namespace SchedulerTelegramBot.Tests
                     },
                     From = new User
                     {
-                        Id = int.Parse(AdminId)
+                        Id = int.Parse(UserId)
                     }
                 }
             };
@@ -109,7 +109,7 @@ namespace SchedulerTelegramBot.Tests
                     },
                     From = new User
                     {
-                        Id = int.Parse(AdminId)
+                        Id = int.Parse(UserId)
                     },
                     Document = new Document
                     {

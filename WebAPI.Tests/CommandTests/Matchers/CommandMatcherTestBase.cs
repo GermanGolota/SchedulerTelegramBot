@@ -18,7 +18,7 @@ namespace SchedulerTelegramBot.Tests
 
         protected const string TestChatId = "56675";
 
-        protected const string AdminId = "12345";
+        protected const string UserId = "12345";
         protected void SetupMessageSendingMock()
         {
             _clientMock.Setup(x => x.SendTextMessageAsync(It.IsAny<ChatId>(), It.IsAny<string>()));

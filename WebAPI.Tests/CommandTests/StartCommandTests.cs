@@ -68,12 +68,12 @@ namespace SchedulerTelegramBot.Tests
         private void SetupRepoToContainChat()
         {
             var expectedException = new ChatAlreadyExistsException();
-            _repoMock.Setup(x => x.AddChat(TestChatId, AdminId)).ThrowsAsync(expectedException);
+            _repoMock.Setup(x => x.AddChat(TestChatId, UserId)).ThrowsAsync(expectedException);
 
         }
         private void SetupRepoToNotContainChat()
         {
-            _repoMock.Setup(x => x.AddChat(TestChatId, AdminId));
+            _repoMock.Setup(x => x.AddChat(TestChatId, UserId));
 
         }
         private void AssertMessageBeenSendOnce()
@@ -101,7 +101,7 @@ namespace SchedulerTelegramBot.Tests
                     },
                     From = new User
                     {
-                        Id = int.Parse(AdminId)
+                        Id = int.Parse(UserId)
                     }
                 }
             };

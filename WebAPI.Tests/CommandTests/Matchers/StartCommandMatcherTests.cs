@@ -63,7 +63,7 @@ namespace SchedulerTelegramBot.Tests.CommandTests.Matchers
                     },
                     From = new User
                     {
-                        Id = int.Parse(AdminId)
+                        Id = int.Parse(UserId)
                     }
                 }
             };
@@ -81,7 +81,7 @@ namespace SchedulerTelegramBot.Tests.CommandTests.Matchers
                     },
                     From = new User
                     {
-                        Id = int.Parse(AdminId)
+                        Id = int.Parse(UserId)
                     }
                 }
             };

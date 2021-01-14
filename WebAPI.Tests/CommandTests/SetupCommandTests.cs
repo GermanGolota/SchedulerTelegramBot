@@ -119,7 +119,7 @@ namespace SchedulerTelegramBot.Tests
                     },
                     From = new User
                     {
-                        Id = int.Parse(AdminId)
+                        Id = int.Parse(UserId)
                     },
                     Document = new Document
                     {
@@ -141,7 +141,7 @@ namespace SchedulerTelegramBot.Tests
                     },
                     From = new User
                     {
-                        Id = int.Parse(AdminId)
+                        Id = int.Parse(UserId)
                     }
                 }
             };

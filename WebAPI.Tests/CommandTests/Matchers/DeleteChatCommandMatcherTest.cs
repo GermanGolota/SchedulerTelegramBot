@@ -81,11 +81,11 @@ namespace SchedulerTelegramBot.Tests
         }
         private void SetupRepoUserIsAdmin()
         {
-            _repoMock.Setup(x => x.GetAdminIdOfChat(It.IsAny<string>())).Returns(AdminId);
+            _repoMock.Setup(x => x.GetAdminIdOfChat(It.IsAny<string>())).Returns(UserId);
         }
         private void SetupRepoUserIsNotAdmin()
         {
-            _repoMock.Setup(x => x.GetAdminIdOfChat(It.IsAny<string>())).Returns("not" + AdminId);
+            _repoMock.Setup(x => x.GetAdminIdOfChat(It.IsAny<string>())).Returns("not" + UserId);
         }
        
         private Update GetUpdateWithMatchingCommand()
@@ -101,7 +101,7 @@ namespace SchedulerTelegramBot.Tests
                     },
                     From = new User
                     {
-                        Id = int.Parse(AdminId)
+                        Id = int.Parse(UserId)
                     }
                 }
             };
@@ -119,7 +119,7 @@ namespace SchedulerTelegramBot.Tests
                     },
                     From = new User
                     {
-                        Id = int.Parse(AdminId)
+                        Id = int.Parse(UserId)
                     }
                 }
             };
