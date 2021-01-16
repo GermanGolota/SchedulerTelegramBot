@@ -1,5 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SchedulerTelegramBot.Client;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using WebAPI.Commands;
 using WebAPI.Commands.Verifiers;
 
@@ -17,37 +21,35 @@ namespace WebAPI.Extensions
         }
         public static IServiceCollection AddTelegramCommands(this IServiceCollection services)
         {
-            AddCommandExecutors(services);
-
-            AddCommandMatchers(services);
-
-            AddCommandController(services);
+            AddCommandComponents(services);
 
             services.AddScoped<CommandsContainer>();
 
             return services;
         }
-        private static void AddCommandExecutors(IServiceCollection services)
-        {
 
-            services.AddScoped<StartCommand>();
-            services.AddScoped<SetupCommand>();
-            services.AddScoped<DeleteChatCommand>();
-            services.AddScoped<DeleteScheduleCommand>();
-        }
-        private static void AddCommandMatchers(IServiceCollection services)
+        private static void AddCommandComponents(IServiceCollection services)
         {
-            services.AddScoped<IMatcher<StartCommand>, StartCommandMatcher>();
-            services.AddScoped<IMatcher<SetupCommand>, SetupCommandMatcher>();
-            services.AddScoped<IMatcher<DeleteChatCommand>, DeleteChatCommandMatcher>();
-            services.AddScoped<IMatcher<DeleteScheduleCommand>, DeleteScheduleCommandMatcher>();
+            List<Type> commandTypes = GetCommandTypes();
+
+            foreach (var commandType in commandTypes)
+            {
+
+                services.AddScoped(commandType);
+
+                Assembly assembly = Assembly.GetExecutingAssembly();
+                Type matcher = assembly.GetIMatcherFor(commandType);
+                Type matcherImpl = assembly.GetMatcherImplementationFor(commandType);
+                services.AddScoped(matcher, matcherImpl);
+
+                Type contoller = typeof(CommandController<>);
+                contoller.MakeGenericType(commandType);
+                services.AddScoped(contoller);
+            }
         }
-        private static void AddCommandController(IServiceCollection services)
+        private static List<Type> GetCommandTypes()
         {
-            services.AddScoped<CommandController<StartCommand>>();
-            services.AddScoped<CommandController<SetupCommand>>();
-            services.AddScoped<CommandController<DeleteChatCommand>>();
-            services.AddScoped<CommandController<DeleteScheduleCommand>>();
+            return Assembly.GetExecutingAssembly().GetTypesThatImplement(typeof(ICommand)).ToList();
         }
     }
 }
