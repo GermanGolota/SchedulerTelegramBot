@@ -11,30 +11,22 @@ using WebAPI.Commands.Verifiers;
 
 namespace WebAPI.Commands
 {
-    public class DeleteChatCommand : CommandBase
+    public class DeleteChatCommand : ICommand
     {
-        private readonly IMatcher<DeleteChatCommand> _matcher;
         private readonly ITelegramClientAdapter _client;
         private readonly IChatRepo _repo;
         private readonly ILogger<DeleteChatCommand> _logger;
 
-        public DeleteChatCommand(IMatcher<DeleteChatCommand> matcher, ITelegramClientAdapter client,
+        public DeleteChatCommand(ITelegramClientAdapter client,
             IChatRepo repo, ILogger<DeleteChatCommand> logger)
         {
-            this._matcher = matcher;
             this._client = client;
             this._repo = repo;
             this._logger = logger;
         }
 
-        protected override async Task<bool> CommandMatches(Update update)
+        public async Task Execute(Update update)
         {
-            return await _matcher.IsMatching(update);
-        }
-
-        protected override async Task ExecuteCommandAsync(Update update)
-        {
-
             string chatIdToBeDeleted = update.Message.Chat.Id.ToString();
             try
             {
@@ -42,11 +34,11 @@ namespace WebAPI.Commands
 
                 await _client.SendTextMessageAsync(chatIdToBeDeleted, StandardMessages.ChatDeletionSuccess);
             }
-            catch(DataAccessException exc)
+            catch (DataAccessException exc)
             {
                 await _client.SendTextMessageAsync(chatIdToBeDeleted, exc.Message);
             }
-            catch(Exception exc)
+            catch (Exception exc)
             {
                 _logger.LogError(exc, "Were not able to delete chat");
             }

@@ -13,28 +13,21 @@ using WebAPI.Commands.Verifiers;
 
 namespace WebAPI.Commands
 {
-    public class SetupCommand : CommandBase
+    public class SetupCommand : ICommand
     {
-        private readonly IMatcher<SetupCommand> _matcher;
         private readonly ITelegramClientAdapter _client;
         private readonly IJobManager _jobs;
         private readonly ILogger<SetupCommand> _logger;
 
-        public SetupCommand(IMatcher<SetupCommand> matcher, ITelegramClientAdapter client, IJobManager jobs,
+        public SetupCommand(ITelegramClientAdapter client, IJobManager jobs,
             ILogger<SetupCommand> logger)
         {
-            this._matcher = matcher;
             this._client = client;
             this._jobs = jobs;
             this._logger = logger;
         }
 
-        protected override async Task<bool> CommandMatches(Update update)
-        {
-            return await _matcher.IsMatching(update);
-        }
-
-        protected override async Task ExecuteCommandAsync(Update update)
+        public async Task Execute(Update update)
         {
             var message = update.Message;
 
@@ -71,8 +64,10 @@ namespace WebAPI.Commands
                 _logger.LogError(exc, "Were not able to setup jobs");
                 throw;
             }
-
         }
+
+
+
         private async Task<string> GetFileContent(string fileId)
         {
             string fileLocation = await _client.DownloadFileFromId(fileId);

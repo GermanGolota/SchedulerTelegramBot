@@ -12,28 +12,21 @@ using WebAPI.Jobs;
 
 namespace WebAPI.Commands
 {
-    public class DeleteScheduleCommand : CommandBase
+    public class DeleteScheduleCommand : ICommand
     {
-        private readonly IMatcher<DeleteScheduleCommand> _matcher;
         private readonly ITelegramClientAdapter _client;
         private readonly IJobManager _jobs;
         private readonly ILogger<DeleteScheduleCommand> _logger;
 
-        public DeleteScheduleCommand(IMatcher<DeleteScheduleCommand> matcher, ITelegramClientAdapter client, IJobManager jobs,
+        public DeleteScheduleCommand(ITelegramClientAdapter client, IJobManager jobs,
             ILogger<DeleteScheduleCommand> logger)
         {
-            this._matcher = matcher;
             this._client = client;
             this._jobs = jobs;
             this._logger = logger;
         }
 
-        protected override async Task<bool> CommandMatches(Update update)
-        {
-            return await _matcher.IsMatching(update);
-        }
-
-        protected override async Task ExecuteCommandAsync(Update update)
+        public async Task Execute(Update update)
         {
             string chatId = update.Message.Chat.Id.ToString();
             try
