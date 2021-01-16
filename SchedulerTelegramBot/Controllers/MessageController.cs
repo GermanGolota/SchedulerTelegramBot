@@ -33,10 +33,7 @@ namespace SchedulerTelegramBot.Controllers
 
                 foreach (ICommand reply in replies)
                 {
-                    Type commandType = reply.GetType();
-                    Type controllerType = typeof(CommandController<>);
-                    controllerType = controllerType.MakeGenericType(commandType);
-                    ICommandController controller = provider.GetRequiredService(controllerType) as ICommandController; 
+                    ICommandController controller = GetCommandController(reply, provider);
                     CommandMatchResult result =  await controller.CheckCommand(update);
                     if (result.Equals(CommandMatchResult.Matching))
                     {
@@ -45,6 +42,13 @@ namespace SchedulerTelegramBot.Controllers
                 }
             }
             return Ok();
+        }
+        private ICommandController GetCommandController(ICommand command, IServiceProvider provider)
+        {
+            Type commandType = command.GetType();
+            Type controllerType = typeof(CommandController<>);
+            controllerType = controllerType.MakeGenericType(commandType);
+             return provider.GetRequiredService(controllerType) as ICommandController;
         }
 
     }
