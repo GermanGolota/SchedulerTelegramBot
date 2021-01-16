@@ -22,11 +22,10 @@ namespace SchedulerTelegramBot.Tests
         private SetupCommand _sut;
         private string testingFileLocation = System.IO.Directory.GetCurrentDirectory() + @"\test.json";
         private readonly Mock<IJobManager> _jobMock = new Mock<IJobManager>();
-        private readonly Mock<IMatcher<SetupCommand>> _matcherMock = new Mock<IMatcher<SetupCommand>>();
         private const string FileId = "123";
         public SetupCommandTests()
         {
-            _sut = new SetupCommand(_matcherMock.Object, _clientMock.Object, _jobMock.Object,
+            _sut = new SetupCommand(_clientMock.Object, _jobMock.Object,
                 new LoggerMock<SetupCommand>());
         }
         [Fact]
@@ -37,7 +36,7 @@ namespace SchedulerTelegramBot.Tests
 
             Update update = GetUpdateWithNoFile();
             //Act
-            await _sut.ExecuteCommandIfMatched(update);
+            await _sut.Execute(update);
             //Assert
             AssertJobsNotBeenSet();
         }
@@ -49,7 +48,7 @@ namespace SchedulerTelegramBot.Tests
 
             Update update = GetUpdateWithFile();
             //Act
-            await _sut.ExecuteCommandIfMatched(update);
+            await _sut.Execute(update);
             //Assert
             AssertJobsBeenSet();
         }
@@ -57,7 +56,6 @@ namespace SchedulerTelegramBot.Tests
         {
             SetupClient();
             SetupJobManager();
-            SetupMatcherVaildCommand();
         }
         private void SetupClient()
         {
@@ -102,10 +100,6 @@ namespace SchedulerTelegramBot.Tests
             _jobMock.Verify(x => x.SetupJobsForChat(It.IsAny<ScheduleModel>(), It.IsAny<ChatId>()), Times.Never);
         }
 
-        private void SetupMatcherVaildCommand()
-        {
-            _matcherMock.Setup(x => x.IsMatching(It.IsAny<Update>())).ReturnsAsync(true);
-        }
         private Update GetUpdateWithFile()
         {
             return new Update

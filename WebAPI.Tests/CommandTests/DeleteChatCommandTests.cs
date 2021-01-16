@@ -15,11 +15,10 @@ namespace SchedulerTelegramBot.Tests
     {
         private DeleteChatCommand _sut;
         private readonly Mock<IChatRepo> _repoMock = new Mock<IChatRepo>();
-        private Mock<IMatcher<DeleteChatCommand>> _matcherMock = new Mock<IMatcher<DeleteChatCommand>>();
         private string SuccessMessage = StandardMessages.ChatDeletionSuccess;
         public DeleteChatCommandTests()
         {
-            _sut = new DeleteChatCommand(_matcherMock.Object,_clientMock.Object,
+            _sut = new DeleteChatCommand(_clientMock.Object,
                 _repoMock.Object, new LoggerMock<DeleteChatCommand>());
         }
         private void AssertMessageBeenSend()
@@ -40,12 +39,10 @@ namespace SchedulerTelegramBot.Tests
 
             SetupRepoToContainChat();
 
-            SetupMatcherVaildCommand();
-
             Update update = GetUpdate();
 
             //Act
-            await _sut.ExecuteCommandIfMatched(update);
+            await _sut.Execute(update);
             //Assert
             AssertMessageBeenSend();
         }
@@ -57,30 +54,18 @@ namespace SchedulerTelegramBot.Tests
 
             SetupRepoToNotContainChat();
 
-            SetupMatcherVaildCommand();
-
-            SetupMatcherValidUpdate();
-
             Update update = GetUpdate();
 
             //Act
-            await _sut.ExecuteCommandIfMatched(update);
+            await _sut.Execute(update);
             //Assert
             AssertMessageNotBeenSend();
         }
 
-        private void SetupMatcherValidUpdate()
-        {
-            _matcherMock.Setup(x => x.IsMatching(It.IsAny<Update>())).ReturnsAsync(true);
-        }
 
         private void AssertMessageNotBeenSend()
         {
             _clientMock.Verify(x => x.SendTextMessageAsync(It.IsAny<ChatId>(), SuccessMessage), Times.Never);
-        }
-        private void SetupMatcherVaildCommand()
-        {
-            _matcherMock.Setup(x => x.IsMatching(It.IsAny<Update>())).ReturnsAsync(true);
         }
         private void SetupRepoToNotContainChat()
         {

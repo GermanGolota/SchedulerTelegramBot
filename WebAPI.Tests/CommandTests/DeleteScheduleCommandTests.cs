@@ -13,11 +13,10 @@ namespace SchedulerTelegramBot.Tests
     public class DeleteScheduleCommandTests:CommandTestBase
     {
         private DeleteScheduleCommand _sut;
-        private readonly Mock<IMatcher<DeleteScheduleCommand>> _matcherMock = new Mock<IMatcher<DeleteScheduleCommand>>();
         private readonly Mock<IJobManager> _jobMock = new Mock<IJobManager>();
         public DeleteScheduleCommandTests()
         {
-            _sut = new DeleteScheduleCommand(_matcherMock.Object, _clientMock.Object,
+            _sut = new DeleteScheduleCommand( _clientMock.Object,
                 _jobMock.Object, new LoggerMock<DeleteScheduleCommand>());
         }
         [Fact]
@@ -26,12 +25,11 @@ namespace SchedulerTelegramBot.Tests
             //Arrange
             SetupMessageSendingMock();
             _jobMock.Setup(x => x.DeleteJobsFromChat(It.IsAny<ChatId>()));
-            _matcherMock.Setup(x => x.IsMatching(It.IsAny<Update>())).ReturnsAsync(true);
 
 
             Update update = GetUpdate();
             //Act
-            await _sut.ExecuteCommandIfMatched(update);
+            await _sut.Execute(update);
             //Assert
             AssertJobBeenPerformed();
         }

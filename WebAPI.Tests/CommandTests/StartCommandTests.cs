@@ -14,13 +14,12 @@ namespace SchedulerTelegramBot.Tests
     {
         private readonly StartCommand _sut;
         private readonly Mock<IChatRepo> _repoMock = new Mock<IChatRepo>();
-        private readonly Mock<IMatcher<StartCommand>> _matcherMock = new Mock<IMatcher<StartCommand>>();
         private const string StartupStickerId = @"CAACAgIAAxkBAAMrX_oDjl4RZ7SqvMaNBxaTese356AAAg0AA3EcFxMefvS-UNPkwR4E";
         private string SuccessMessage = StandardMessages.ChatRegistration;
         public StartCommandTests()
         {
-            _sut = new StartCommand(_matcherMock.Object,
-                _repoMock.Object, _clientMock.Object, new LoggerMock<StartCommand>());
+            _sut = new StartCommand(_repoMock.Object, _clientMock.Object,
+                new LoggerMock<StartCommand>());
         }
 
         [Fact]
@@ -29,13 +28,11 @@ namespace SchedulerTelegramBot.Tests
             //Arrange
             SetupMessageSendingMock();
 
-            SetupMatcherVaildCommand();
-
             SetupRepoToContainChat();
 
             Update update = GetUpdate();
             //Act
-            await _sut.ExecuteCommandIfMatched(update);
+            await _sut.Execute(update);
             //Assert
             AssertMessageNotBeenSend();
         }
@@ -45,21 +42,15 @@ namespace SchedulerTelegramBot.Tests
             //Arrange
             SetupMessageSendingMock();
 
-            SetupMatcherVaildCommand();
-
             SetupRepoToNotContainChat();
 
             Update update = GetUpdate();
             //Act
-            await _sut.ExecuteCommandIfMatched(update);
+            await _sut.Execute(update);
             //Assert
             AssertMessageBeenSendOnce();
         }
-
-        private void SetupMatcherVaildCommand()
-        {
-            _matcherMock.Setup(x => x.IsMatching(It.IsAny<Update>())).ReturnsAsync(true);
-        }
+        
 
         private void SetupRepoToContainChat()
         {
