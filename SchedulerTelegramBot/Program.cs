@@ -68,7 +68,7 @@ namespace SchedulerTelegramBot
             {
                 var provider = scope.ServiceProvider;
                 CommandsContainer repliesContainer = provider.GetService<CommandsContainer>();
-                var controller = new MessageController(repliesContainer);
+                var controller = new MessageController(repliesContainer, provider);
                 var config = provider.GetService<IConfiguration>();
                 string token = config.GetValue<string>("Token");
                 TelegramBotClient client = new TelegramBotClient(token);
