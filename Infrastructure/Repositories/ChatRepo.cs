@@ -78,10 +78,7 @@ namespace Infrastructure.Repositories
         {
             var chat = _context.Chats.Include(chat => chat.Schedule).First(chat => chat.ChatId == chatId);
 
-            if (chat is null)
-            {
-                throw new ChatDontExistException();
-            }
+            ValidateChatExistance(chat);
 
             var schedule = _context.Schedules.AsNoTracking().Include(sch => sch.Alerts)
                 .Where(sch => sch.ScheduleId == chat.ScheduleId).FirstOrDefault();
