@@ -84,7 +84,12 @@ namespace Infrastructure.Repositories
             }
 
             var schedule = _context.Schedules.AsNoTracking().Include(sch => sch.Alerts)
-                .Where(sch => sch.ScheduleId == chat.ScheduleId).First();
+                .Where(sch => sch.ScheduleId == chat.ScheduleId).FirstOrDefault();
+
+            if(schedule is null)
+            {
+                throw new ScheduleDontExistException();
+            }
 
             List<Alert> output = schedule.Alerts.ToList();
 
