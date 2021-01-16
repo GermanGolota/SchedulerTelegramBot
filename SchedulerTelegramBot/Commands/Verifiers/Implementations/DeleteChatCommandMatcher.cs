@@ -22,7 +22,7 @@ namespace WebAPI.Commands.Verifiers
             if (UpdateIsCommand(update))
             {
                 var message = update.Message;
-                string messageText = message.Text;
+                string messageText = message.Text??"";
                 if (FirstWordMatchesCommandName(messageText, commandName))
                 {
                     string chatId = message.Chat.Id.ToString();
