@@ -10,6 +10,10 @@ namespace WebAPI.Extensions
 {
     public static class ReflectionExtensions
     {
+        public static IEnumerable<Type> GetAllCommands(this Assembly assembly)
+        {
+            return assembly.GetTypesThatImplement(typeof(ICommand));
+        }
         public static IEnumerable<Type> GetTypesThatImplement(this Assembly assembly, Type interfaceType)
         { 
             List<Type> commands = assembly.GetTypes().Where(x => x.GetInterfaces().Contains(interfaceType)).ToList();

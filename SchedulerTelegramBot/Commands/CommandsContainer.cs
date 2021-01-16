@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using WebAPI.Extensions;
 
 namespace WebAPI.Commands
 {
@@ -11,7 +12,7 @@ namespace WebAPI.Commands
         private readonly List<ICommand> messageReplies = new List<ICommand>();
         public CommandsContainer(IServiceProvider provider)
         {
-            IEnumerable<Type> commandTypes = GetAllChildTypes(typeof(ICommand));
+            IEnumerable<Type> commandTypes = GetCommands();
             using (var scope = provider.CreateScope())
             {
                 var serviceProvider = scope.ServiceProvider;
@@ -26,10 +27,9 @@ namespace WebAPI.Commands
         {
             return messageReplies.AsReadOnly();
         }
-        private IEnumerable<Type> GetAllChildTypes(Type parentClass)
+        private IEnumerable<Type> GetCommands()
         {
-            return Assembly.GetExecutingAssembly().GetTypes()
-                .Where(x=>!x.IsInterface&&x.GetInterfaces().Contains(parentClass));
+            return Assembly.GetExecutingAssembly().GetAllCommands();
         }
     }
 }

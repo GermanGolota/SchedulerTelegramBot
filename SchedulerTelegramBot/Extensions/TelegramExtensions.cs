@@ -48,7 +48,7 @@ namespace WebAPI.Extensions
         }
         private static List<Type> GetCommandTypes()
         {
-            return Assembly.GetExecutingAssembly().GetTypesThatImplement(typeof(ICommand)).ToList();
+            return Assembly.GetExecutingAssembly().GetAllCommands().ToList();
         }
     }
 }
