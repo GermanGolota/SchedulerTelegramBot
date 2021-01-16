@@ -7,7 +7,7 @@ using Telegram.Bot.Types;
 
 namespace WebAPI.Commands.Verifiers
 {
-    public abstract class RequestMatcherBase<T>:IMatcher<T> where T : CommandBase
+    public abstract class RequestMatcherBase<T>:IMatcher<T> where T : ICommand
     {
 
         public abstract Task<bool> IsMatching(Update update);
