@@ -29,11 +29,11 @@ namespace SchedulerTelegramBot.Controllers
             using (var scope = _provider.CreateScope())
             {
                 var provider = scope.ServiceProvider;
-                var replies = _container.GetMessageReplies();
+                var commands = _container.GetCommands();
 
-                foreach (ICommand reply in replies)
+                foreach (ICommand command in commands)
                 {
-                    ICommandController controller = GetCommandController(reply, provider);
+                    ICommandController controller = GetCommandController(command, provider);
                     CommandMatchResult result =  await controller.CheckCommand(update);
                     if (result.Equals(CommandMatchResult.Matching))
                     {

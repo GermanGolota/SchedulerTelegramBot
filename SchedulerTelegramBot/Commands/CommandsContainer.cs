@@ -9,25 +9,25 @@ namespace WebAPI.Commands
 {
     public class CommandsContainer
     {
-        private readonly List<ICommand> messageReplies = new List<ICommand>();
+        private readonly List<ICommand> commands = new List<ICommand>();
         public CommandsContainer(IServiceProvider provider)
         {
-            IEnumerable<Type> commandTypes = GetCommands();
+            IEnumerable<Type> commandTypes = GetCommandTypes();
             using (var scope = provider.CreateScope())
             {
                 var serviceProvider = scope.ServiceProvider;
                 foreach (var commandType in commandTypes)
                 {
                     ICommand command = (ICommand)serviceProvider.GetRequiredService(commandType);
-                    messageReplies.Add(command);
+                    commands.Add(command);
                 }
             }
         }
-        public IReadOnlyList<ICommand> GetMessageReplies()
+        public IReadOnlyList<ICommand> GetCommands()
         {
-            return messageReplies.AsReadOnly();
+            return commands.AsReadOnly();
         }
-        private IEnumerable<Type> GetCommands()
+        private IEnumerable<Type> GetCommandTypes()
         {
             return Assembly.GetExecutingAssembly().GetAllCommands();
         }
