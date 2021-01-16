@@ -18,10 +18,21 @@ namespace WebAPI.Commands.Verifiers
             if (UpdateIsCommand(update))
             {
                 var message = update.Message;
-                string messageCaption = message.Caption ?? "";
+                var chatId = message.Chat.Id.ToString();
+                if (message.Caption is null)
+                {
+                    string messageText = message.Text;
+
+                    if(messageText!=null&&FirstWordMatchesCommandName(messageText, commandName))
+                    {
+                        await _client.SendTextMessageAsync(chatId, StandardMessages.NoFileAttached);
+                    }
+                    
+                    return false;
+                }
+                string messageCaption = message.Caption;
                 if (FirstWordMatchesCommandName(messageCaption, commandName))
                 {
-                    var chatId = message.Chat.Id.ToString();
                     string userId = message.From.Id.ToString();
                     if (!UserIsAdminInChat(userId, chatId))
                     {
