@@ -29,9 +29,5 @@ namespace WebAPI.Extensions
                .FirstOrDefault();
             return output ;
         }
-        private static IEnumerable<Type> InheritsFrom(this IEnumerable<Type> types, Type interfaceType)
-        {
-            return types.Where(x => x.GetInterfaces().Contains(interfaceType));
-        }
     }
 }
