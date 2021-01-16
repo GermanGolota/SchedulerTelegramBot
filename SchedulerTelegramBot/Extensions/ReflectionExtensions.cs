@@ -15,7 +15,7 @@ namespace WebAPI.Extensions
             List<Type> commands = assembly.GetTypes().Where(x => x.GetInterfaces().Contains(interfaceType)).ToList();
             return commands;
         }
-        public static Type GetIMatcherFor(this Assembly assembly, Type command)
+        public static Type GetIMatcher(this Type command)
         {
             Type output = typeof(IMatcher<>);
             output = output.MakeGenericType(command);

@@ -37,9 +37,8 @@ namespace WebAPI.Extensions
 
                 services.AddScoped(commandType);
 
-                Assembly assembly = Assembly.GetExecutingAssembly();
-                Type matcher = assembly.GetIMatcherFor(commandType);
-                Type matcherImpl = assembly.GetMatcherImplementationFor(commandType);
+                Type matcher = commandType.GetIMatcher();
+                Type matcherImpl = Assembly.GetExecutingAssembly().GetMatcherImplementationFor(commandType);
                 services.AddScoped(matcher, matcherImpl);
 
                 Type contoller = typeof(CommandController<>);

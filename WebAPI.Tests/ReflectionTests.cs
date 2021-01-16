@@ -43,7 +43,7 @@ namespace SchedulerTelegramBot.Tests
             Type command = typeof(StartCommand);
             Type expected = typeof(IMatcher<StartCommand>);
 
-            Type actual = assembly.GetIMatcherFor(command);
+            Type actual = command.GetIMatcher();
 
             Assert.Equal(expected.Name, actual.Name);
             Type expectedGeneric = expected.GetGenericArguments().FirstOrDefault();
