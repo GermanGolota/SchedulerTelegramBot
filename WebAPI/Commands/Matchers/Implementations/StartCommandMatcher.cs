@@ -6,25 +6,11 @@ using Telegram.Bot.Types;
 
 namespace WebAPI.Commands.Verifiers
 {
-    public class StartCommandMatcher : RequestMatcherBase<StartCommand>
+    public class StartCommandMatcher : StandardMatcherBehaviour<StartCommand>
     {
-
-        private string commandName = "start";
         public StartCommandMatcher()
         {
-        }
-        public override async Task<bool> IsMatching(Update update)
-        {
-            if (UpdateIsCommand(update))
-            {
-                string messageText = update.Message.Text ?? "";
-
-                if (FirstWordMatchesCommandName(messageText, commandName))
-                {
-                    return true;
-                }
-            }
-            return false;
+            this.commandName = "start";
         }
     }
 }

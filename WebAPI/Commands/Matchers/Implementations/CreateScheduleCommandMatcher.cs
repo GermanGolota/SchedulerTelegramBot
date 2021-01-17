@@ -4,21 +4,11 @@ using WebAPI.Commands.Verifiers;
 
 namespace WebAPI.Commands
 {
-    public class CreateScheduleCommandMatcher : RequestMatcherBase<CreateScheduleCommand>
+    public class CreateScheduleCommandMatcher : StandardMatcherBehaviour<CreateScheduleCommand>
     {
-        private string commandName = "createSchedule";
-        public override async Task<bool> IsMatching(Update update)
+        public CreateScheduleCommandMatcher()
         {
-            if (UpdateIsCommand(update))
-            {
-                string messageText = update.Message.Text ?? "";
-
-                if (FirstWordMatchesCommandName(messageText, commandName))
-                {
-                    return true;
-                }
-            }
-            return false;
+            this.commandName = "createSchedule";
         }
     }
 }

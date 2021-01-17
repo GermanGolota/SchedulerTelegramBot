@@ -8,35 +8,11 @@ using WebAPI.Client;
 
 namespace WebAPI.Commands.Verifiers
 {
-    public class DeleteChatCommandMatcher : AdminCommandMatcherBase<DeleteChatCommand>
+    public class DeleteChatCommandMatcher : AdminCommandMatcherBehaviour<DeleteChatCommand>
     {
-        private readonly ITelegramClientAdapter _client;
-
-        private string commandName = "deleteChat";
-        public DeleteChatCommandMatcher(IChatRepo repo, ITelegramClientAdapter client) :base( repo)
+        public DeleteChatCommandMatcher(IChatRepo repo, ITelegramClientAdapter client) :base( repo, client)
         {
-            this._client = client;
-        }
-        public override async Task<bool> IsMatching(Update update)
-        {
-            if (UpdateIsCommand(update))
-            {
-                var message = update.Message;
-                string messageText = message.Text??"";
-                if (FirstWordMatchesCommandName(messageText, commandName))
-                {
-                    string chatId = message.Chat.Id.ToString();
-                    string userId = message.From.Id.ToString();
-                    if (!UserIsAdminInChat(userId, chatId))
-                    {
-                        await _client.SendTextMessageAsync(chatId,
-                            StandardMessages.PermissionDenied);
-                        return false;
-                    }
-                    return true;
-                }
-            }
-            return false;
+            this.commandName = "deleteChat";
         }
     }
 }
