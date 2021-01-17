@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using SchedulerTelegramBot.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using WebAPI.Client;
 using WebAPI.Commands;
 using WebAPI.Commands.Verifiers;
 

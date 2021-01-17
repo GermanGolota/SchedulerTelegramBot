@@ -1,7 +1,7 @@
 ﻿using Infrastructure.Repositories;
-using SchedulerTelegramBot.Client;
 using System.Threading.Tasks;
 using Telegram.Bot.Types;
+using WebAPI.Client;
 
 namespace WebAPI.Commands.Verifiers
 {

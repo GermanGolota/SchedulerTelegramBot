@@ -1,6 +1,6 @@
 ﻿using Moq;
-using SchedulerTelegramBot.Client;
 using Telegram.Bot.Types;
+using WebAPI.Client;
 
 namespace SchedulerTelegramBot.Tests
 {

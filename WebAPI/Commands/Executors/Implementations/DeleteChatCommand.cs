@@ -1,5 +1,4 @@
 ﻿using Infrastructure.Repositories;
-using SchedulerTelegramBot.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +7,7 @@ using Telegram.Bot.Types;
 using Infrastructure.Exceptions;
 using Microsoft.Extensions.Logging;
 using WebAPI.Commands.Verifiers;
+using WebAPI.Client;
 
 namespace WebAPI.Commands
 {

@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Telegram.Bot;
 
-namespace SchedulerTelegramBot.Client
+namespace WebAPI.Client
 {
     public class TelegramBotClientFactory : ITelegramBotClientFactory
     {

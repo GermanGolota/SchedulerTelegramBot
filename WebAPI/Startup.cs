@@ -10,7 +10,7 @@ using Hangfire.PostgreSql;
 using WebAPI.Extensions;
 using WebAPI.Jobs;
 
-namespace SchedulerTelegramBot
+namespace WebAPI
 {
     public class Startup
     {

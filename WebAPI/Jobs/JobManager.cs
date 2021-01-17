@@ -2,7 +2,6 @@
 using Hangfire;
 using Infrastructure.DTOs;
 using Infrastructure.Repositories;
-using SchedulerTelegramBot.Client;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

@@ -1,5 +1,4 @@
 ﻿using Infrastructure.Repositories;
-using SchedulerTelegramBot.Client;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -10,6 +9,7 @@ using WebAPI.Jobs;
 using Microsoft.Extensions.Logging;
 using Infrastructure.Exceptions;
 using WebAPI.Commands.Verifiers;
+using WebAPI.Client;
 
 namespace WebAPI.Commands
 {

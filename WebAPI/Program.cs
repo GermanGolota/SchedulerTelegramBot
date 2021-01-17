@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using SchedulerTelegramBot.Client;
 using SchedulerTelegramBot.Controllers;
 using System;
 using System.Collections.Generic;
@@ -12,9 +11,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
+using WebAPI.Client;
 using WebAPI.Commands;
 
-namespace SchedulerTelegramBot
+namespace WebAPI
 {
     public class Program
     {

@@ -1,6 +1,6 @@
-﻿using SchedulerTelegramBot.Client;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Telegram.Bot.Types;
+using WebAPI.Client;
 
 namespace WebAPI.Hangfire
 {

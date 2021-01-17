@@ -1,12 +1,12 @@
 ﻿using Infrastructure.Exceptions;
 using Infrastructure.Repositories;
 using Microsoft.Extensions.Logging;
-using SchedulerTelegramBot.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Telegram.Bot.Types;
+using WebAPI.Client;
 using WebAPI.Commands.Verifiers;
 using WebAPI.Jobs;
 
