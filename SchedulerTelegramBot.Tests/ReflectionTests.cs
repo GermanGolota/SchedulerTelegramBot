@@ -24,6 +24,7 @@ namespace SchedulerTelegramBot.Tests
             //Assert
             Assert.Contains(commandType, controllerType.GetGenericArguments());
         }
+        //Fails with addition of commands
         [Fact]
         public void ShouldGetAllCommands()
         {
@@ -33,11 +34,12 @@ namespace SchedulerTelegramBot.Tests
             //Act
             List<Type> commands = assembly.GetTypesThatImplement(command).ToList();
             //Assert
-            Assert.Equal(4, commands.Count);
+            Assert.Equal(5, commands.Count);
             Assert.Contains(typeof(StartCommand), commands);
             Assert.Contains(typeof(SetupCommand), commands);
             Assert.Contains(typeof(DeleteScheduleCommand), commands);
             Assert.Contains(typeof(DeleteChatCommand), commands);
+            Assert.Contains(typeof(CreateScheduleCommand), commands);
         }
         [Fact]
         public void ShouldGetMatcher()
@@ -64,6 +66,17 @@ namespace SchedulerTelegramBot.Tests
             Type actual = assembly.GetMatcherImplementationFor(command);
             //Assert
             Assert.Equal(expected.Name, actual.Name);
+        }
+        [Fact]
+        public void ShouldGetIMatcher()
+        {
+            //Arrange
+            Type deleteChat = typeof(DeleteChatCommandMatcher);
+            Type expected = typeof(IMatcher<DeleteChatCommand>);
+            //Act
+            List<Type> interfaces = deleteChat.GetInterfaces().ToList();
+            //Assert
+            Assert.Contains(expected, interfaces);
         }
         public Assembly GetWEBAPIAssembly()
         {
