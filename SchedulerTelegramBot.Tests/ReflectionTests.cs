@@ -16,19 +16,23 @@ namespace SchedulerTelegramBot.Tests
         [Fact]
         public void TypeShouldContainAssignedGenericType()
         {
+            //Arrange
             Type commandType = typeof(StartCommand);
             Type controllerType = typeof(CommandController<>);
+            //Act
             controllerType = controllerType.MakeGenericType(commandType);
-
+            //Assert
             Assert.Contains(commandType, controllerType.GetGenericArguments());
         }
         [Fact]
         public void ShouldGetAllCommands()
         {
+            //Arrange
             Assembly assembly = GetWEBAPIAssembly();
             Type command = typeof(ICommand);
+            //Act
             List<Type> commands = assembly.GetTypesThatImplement(command).ToList();
-
+            //Assert
             Assert.Equal(4, commands.Count);
             Assert.Contains(typeof(StartCommand), commands);
             Assert.Contains(typeof(SetupCommand), commands);
@@ -38,29 +42,27 @@ namespace SchedulerTelegramBot.Tests
         [Fact]
         public void ShouldGetMatcher()
         {
-            Assembly assembly = GetWEBAPIAssembly();
-
+            //Arrange
             Type command = typeof(StartCommand);
             Type expected = typeof(IMatcher<StartCommand>);
-
+            //Act
             Type actual = command.GetIMatcher();
-
-            Assert.Equal(expected.Name, actual.Name);
             Type expectedGeneric = expected.GetGenericArguments().FirstOrDefault();
             Type actualGeneric = actual.GetGenericArguments().FirstOrDefault();
-
+            //Assert
+            Assert.Equal(expected.Name, actual.Name);
             Assert.Equal(actualGeneric, expectedGeneric);
-
         }
         [Fact]
         public void ShouldGetMatcherImplementation()
         {
+            //Arrange
             Assembly assembly = GetWEBAPIAssembly();
             Type command = typeof(StartCommand);
             Type expected = typeof(StartCommandMatcher);
-
+            //Act
             Type actual = assembly.GetMatcherImplementationFor(command);
-
+            //Assert
             Assert.Equal(expected.Name, actual.Name);
         }
         public Assembly GetWEBAPIAssembly()
