@@ -34,7 +34,8 @@ namespace SchedulerTelegramBot
             services.AddScoped<IJobManager, JobManager>();
 
             services.AddTelegramClient();
-            services.AddTelegramCommands();
+            //Signifies that commands are in the same assembly as startup
+            services.AddTelegramCommands(typeof(Startup).Assembly);
 
             services.AddControllers();
 

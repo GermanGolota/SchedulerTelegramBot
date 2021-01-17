@@ -19,26 +19,25 @@ namespace WebAPI.Extensions
 
             return services;
         }
-        public static IServiceCollection AddTelegramCommands(this IServiceCollection services)
+        public static IServiceCollection AddTelegramCommands(this IServiceCollection services, Assembly assembly)
         {
-            AddCommandComponents(services);
+            AddCommandComponents(services, assembly);
 
             services.AddScoped<CommandsContainer>();
 
             return services;
         }
 
-        private static void AddCommandComponents(IServiceCollection services)
+        private static void AddCommandComponents(IServiceCollection services, Assembly assembly)
         {
-            List<Type> commandTypes = GetCommandTypes();
+            List<Type> commandTypes = GetCommandTypes(assembly);
 
             foreach (var commandType in commandTypes)
             {
-
                 services.AddScoped(commandType);
 
                 Type matcher = commandType.GetIMatcher();
-                Type matcherImpl = Assembly.GetExecutingAssembly().GetMatcherImplementationFor(commandType);
+                Type matcherImpl = assembly.GetMatcherImplementationFor(commandType);
                 services.AddScoped(matcher, matcherImpl);
 
                 Type contoller = typeof(CommandController<>);
@@ -46,9 +45,9 @@ namespace WebAPI.Extensions
                 services.AddScoped(contoller);
             }
         }
-        private static List<Type> GetCommandTypes()
+        private static List<Type> GetCommandTypes(Assembly assembly)
         {
-            return Assembly.GetExecutingAssembly().GetAllCommands().ToList();
+            return assembly.GetAllCommands().ToList();
         }
     }
 }
