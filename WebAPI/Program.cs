@@ -22,9 +22,9 @@ namespace WebAPI
         {
             var host = CreateHostBuilder(args).Build();
 
-            await InitializeTelegramClient(host);
-
             MigrateDatabase(host);
+
+            await InitializeTelegramClient(host);
 
             host.Run();
         }
