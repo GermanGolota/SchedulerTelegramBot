@@ -8,9 +8,8 @@ namespace WebAPI.Commands.Verifiers
 {
     public class StartCommandMatcher : StandardMatcherBehaviour<StartCommand>
     {
-        public StartCommandMatcher()
+        public StartCommandMatcher():base(CommandNames.Start)
         {
-            this.commandName = "start";
         }
     }
 }

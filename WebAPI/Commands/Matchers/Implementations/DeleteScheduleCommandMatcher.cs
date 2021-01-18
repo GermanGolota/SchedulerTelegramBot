@@ -10,9 +10,9 @@ namespace WebAPI.Commands.Verifiers
 {
     public class DeleteScheduleCommandMatcher : AdminCommandMatcherBehaviour<DeleteScheduleCommand>
     {
-        public DeleteScheduleCommandMatcher(IChatRepo repo, ITelegramClientAdapter client):base(repo, client)
+        public DeleteScheduleCommandMatcher(IChatRepo repo, ITelegramClientAdapter client)
+            :base(repo, client, CommandNames.DeleteSchedule)
         {
-            this.commandName = "deleteSchedule";
         }
     }
 }

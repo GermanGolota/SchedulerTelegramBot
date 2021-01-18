@@ -6,9 +6,8 @@ namespace WebAPI.Commands
 {
     public class CreateScheduleCommandMatcher : StandardMatcherBehaviour<CreateScheduleCommand>
     {
-        public CreateScheduleCommandMatcher()
+        public CreateScheduleCommandMatcher():base(CommandNames.CreateSchedule)
         {
-            this.commandName = "createSchedule";
         }
     }
 }
