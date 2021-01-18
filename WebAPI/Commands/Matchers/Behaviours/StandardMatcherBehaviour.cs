@@ -8,7 +8,11 @@ namespace WebAPI.Commands.Verifiers
 {
     public class StandardMatcherBehaviour<T> : RequestMatcherBase<T> where T : ICommand
     {
-        public string commandName { get; init; }
+        private string commandName { get; init; }
+        public StandardMatcherBehaviour(string commandName)
+        {
+            this.commandName = commandName;
+        }
         public override async Task<bool> IsMatching(Update update)
         {
             if (UpdateIsCommand(update))

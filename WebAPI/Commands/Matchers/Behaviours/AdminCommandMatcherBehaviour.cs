@@ -13,10 +13,11 @@ namespace WebAPI.Commands.Verifiers
     {
         private readonly ITelegramClientAdapter _client;
 
-        public string commandName { get; init; }
-        public AdminCommandMatcherBehaviour(IChatRepo repo, ITelegramClientAdapter client):base(repo)
+        private string commandName { get; init; }
+        public AdminCommandMatcherBehaviour(IChatRepo repo, ITelegramClientAdapter client, string commandName):base(repo)
         {
             this._client = client;
+            this.commandName = commandName;
         }
 
         public override async Task<bool> IsMatching(Update update)

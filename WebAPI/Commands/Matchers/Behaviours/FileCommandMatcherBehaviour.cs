@@ -11,11 +11,12 @@ namespace WebAPI.Commands.Verifiers
     public class FileAdminCommandMatcherBehaviour<T> : AdminCommandMatcherBase<T> where T : ICommand
     {
         private readonly ITelegramClientAdapter _client;
-        public string commandName { get; init; }
+        private string commandName { get; init; }
 
-        public FileAdminCommandMatcherBehaviour(ITelegramClientAdapter client, IChatRepo repo):base(repo)
+        public FileAdminCommandMatcherBehaviour(ITelegramClientAdapter client, IChatRepo repo, string commandName):base(repo)
         {
             this._client = client;
+            this.commandName = commandName;
         }
         public override async Task<bool> IsMatching(Update update)
         {
