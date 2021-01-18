@@ -53,11 +53,13 @@ namespace WebAPI
         {
             app.UseHangfireServer();
 
+            //could be moved into dev mode only
+            app.UseHangfireDashboard();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
 
-                app.UseHangfireDashboard();
             }
 
             app.UseRouting();
