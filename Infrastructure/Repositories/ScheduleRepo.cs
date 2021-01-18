@@ -49,7 +49,8 @@ namespace Infrastructure.Repositories
 
         public async Task TryApplyScheduleToChat(Schedule schedule, string ChatId)
         {
-            var chat = await _context.Chats.FirstAsync(chat => chat.ChatId == ChatId);
+            var chat = await _context.Chats.Include(x=>x.Schedule)
+                .FirstAsync(chat => chat.ChatId == ChatId);
             if (chat is null)
             {
                 throw new ChatDontExistException();
