@@ -39,14 +39,7 @@ namespace WebAPI
 
             services.AddControllers();
 
-            var options = new PostgreSqlStorageOptions();
-            options.PrepareSchemaIfNecessary = true;
-
-            services.AddHangfire(config =>
-            {
-                config.UsePostgreSqlStorage(Config.GetConnectionString("Main"), options);
-            });
-            JobStorage.Current = new PostgreSqlStorage(Config.GetConnectionString("Main"), options);
+            services.AddConfiguredHangfire(Config);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

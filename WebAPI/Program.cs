@@ -36,7 +36,6 @@ namespace WebAPI
                 var provider = scope.ServiceProvider;
                 var context = provider.GetRequiredService<SchedulesContext>();
                 context.Database.Migrate();
-
             }
         }
 
