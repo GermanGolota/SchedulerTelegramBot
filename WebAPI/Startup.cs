@@ -39,7 +39,11 @@ namespace WebAPI
 
             services.AddControllers();
 
-            services.AddConfiguredHangfire(Config);
+            services.AddConfiguredHangfire(x=>
+            {
+                x.connectionString = Config.GetConnectionString("Main");
+                x.PrepareSchema = true;
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
