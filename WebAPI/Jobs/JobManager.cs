@@ -117,15 +117,17 @@ namespace WebAPI.Jobs
 
             string newName = model.NewName;
 
-            List<string> jobIds = SetupJobs(dtoAlerts, chatId);
+            int scheduleId = await _chatRepo.GetScheduleIdOfChat(chatId);
+
+            int initialCount = await _scheduleRepo.GetAlertsCountOf(scheduleId);
+
+            List<string> jobIds = SetupJobs(dtoAlerts, chatId, initialCount);
 
             try
             {
                 var alerts = ConvertAlerts(dtoAlerts);
 
                 SetJobIdsToAlerts(jobIds, alerts);
-
-                int scheduleId = await _chatRepo.GetScheduleIdOfChat(chatId);
 
                 await ApplyNewName(newName, scheduleId);
 
