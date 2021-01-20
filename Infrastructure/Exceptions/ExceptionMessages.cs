@@ -11,5 +11,6 @@ namespace Infrastructure.Exceptions
         public readonly static string ScheduleAlreadyAttached = "This chat already has schedule attached to it";
         public readonly static string BadCrones = "Some of the crones are not proper";
         public readonly static string ScheduleDontExistsMessage = "This chat dones not a have schedule attached to it";
+        public readonly static string NoFileMessage = "There is no file in this message";
     }
 }
