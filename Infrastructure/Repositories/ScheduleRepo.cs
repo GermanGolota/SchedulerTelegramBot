@@ -32,7 +32,12 @@ namespace Infrastructure.Repositories
             }
             if (ConsistsOfProperCrons(alerts))
             {
-                schedule.Alerts = schedule.Alerts.Union(alerts);
+                //manually sets foreign key reference
+                foreach (var alert in alerts)
+                {
+                    alert.ScheduleId = schedule.ScheduleId;
+                }
+                await _context.Alerts.AddRangeAsync(alerts);
             }
             else
             {
@@ -44,14 +49,9 @@ namespace Infrastructure.Repositories
 
         public async Task<int> GetAlertsCountOf(int scheduleId)
         {
-            var schedule = _context.Schedules.Where(x => x.ScheduleId == scheduleId).Include(x=>x.Alerts).FirstOrDefault();
+            var alerts = _context.Alerts.Where(x => x.ScheduleId == scheduleId).ToList();
 
-            if(schedule is null)
-            {
-                throw new ScheduleDontExistException();
-            }
-
-            return schedule.Alerts.Count();
+            return alerts.Count;
         }
 
         public async Task RemoveScheduleFromChat(string ChatId)
