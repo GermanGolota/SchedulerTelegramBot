@@ -6,5 +6,7 @@ namespace Infrastructure.DTOs
     {
         Schedule ConvertScheduleFromDTO(ScheduleModel dto);
         Alert ConvertAlertFromDto(AlertModel dto);
+        ScheduleModel ConvertScheduleToDTO(Schedule schedule);
+        AlertModel ConvertAlertToDTO(Alert alert);
     }
 }

@@ -15,6 +15,7 @@ namespace Infrastructure.DTOs
             return output;
         }
 
+   
         public Schedule ConvertScheduleFromDTO(ScheduleModel dto)
         {
             List<Alert> alerts = new List<Alert>();
@@ -29,5 +30,29 @@ namespace Infrastructure.DTOs
             };
             return output;
         }
+
+        public ScheduleModel ConvertScheduleToDTO(Schedule schedule)
+        {
+            List<AlertModel> alerts = new List<AlertModel>();
+            foreach (var alert in schedule.Alerts)
+            {
+                alerts.Add(ConvertAlertToDTO(alert));
+            }
+            ScheduleModel output = new ScheduleModel
+            {
+                Alerts = alerts,
+                Name = schedule.Name
+            };
+            return output;
+        }
+        public AlertModel ConvertAlertToDTO(Alert alert)
+        {
+            return new AlertModel
+            {
+                Cron = alert.Cron,
+                Message = alert.Message
+            };
+        }
+
     }
 }
