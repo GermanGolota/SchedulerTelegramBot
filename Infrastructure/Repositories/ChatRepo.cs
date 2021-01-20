@@ -1,5 +1,6 @@
 ﻿using Core;
 using Core.Entities;
+using Infrastructure.DTOs;
 using Infrastructure.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -12,10 +13,12 @@ namespace Infrastructure.Repositories
     public class ChatRepo : IChatRepo
     {
         private readonly SchedulesContext _context;
+        private readonly IModelConverter _converter;
 
-        public ChatRepo(SchedulesContext context)
+        public ChatRepo(SchedulesContext context, IModelConverter converter)
         {
             this._context = context;
+            this._converter = converter;
         }
 
         public async Task AddChat(string chatId, string adminId)
@@ -104,6 +107,27 @@ namespace Infrastructure.Repositories
             int? scheduleId = chat.ScheduleId;
 
             return scheduleId ?? throw new ScheduleDontExistException();
+        }
+
+        public async Task<ScheduleModel> GetScheduleForChat(string chatId)
+        {
+            var chat = _context.Chats.Where(x => x.ChatId == chatId).Include(x => x.Schedule).FirstOrDefault();
+
+            if(chat is null)
+            {
+                throw new ChatDontExistException();
+            }
+
+            var schedule = chat.Schedule;
+
+            if(schedule is null)
+            {
+                throw new ScheduleDontExistException();
+            }
+
+            var output = _converter.ConvertScheduleToDTO(schedule);
+
+            return output;
         }
     }
 }

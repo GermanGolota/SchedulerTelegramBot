@@ -1,4 +1,5 @@
 ﻿using Core.Entities;
+using Infrastructure.DTOs;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -11,5 +12,6 @@ namespace Infrastructure.Repositories
         Task DeleteChat(string chatId);
         List<Alert> GetAlertsOfChat(string chatId);
         Task<int> GetScheduleIdOfChat(string ChatId);
+        Task<ScheduleModel> GetScheduleForChat(string chatId);
     }
 }
