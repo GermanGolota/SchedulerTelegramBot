@@ -11,5 +11,6 @@ namespace Core
         }
         public DbSet<Schedule> Schedules { get; set; }
         public DbSet<Chat> Chats { get; set; }
+        public DbSet<Alert> Alerts { get; set; }
     }
 }
