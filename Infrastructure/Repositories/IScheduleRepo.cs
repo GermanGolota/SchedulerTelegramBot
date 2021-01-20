@@ -1,4 +1,5 @@
 ﻿using Core.Entities;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
@@ -7,5 +8,7 @@ namespace Infrastructure.Repositories
     {
         Task TryApplyScheduleToChat(Schedule schedule, string ChatId);
         Task RemoveScheduleFromChat(string ChatId);
+        Task AddAlertsToSchedule(IEnumerable<Alert> alerts, int ScheduleId);
+        Task UpdateScheduleName(string newName, int ScheduleId);
     }
 }

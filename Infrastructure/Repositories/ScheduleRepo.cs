@@ -22,6 +22,28 @@ namespace Infrastructure.Repositories
             this._croneVerifier = croneVerifier;
         }
 
+        public async Task AddAlertsToSchedule(IEnumerable<Alert> alerts, int ScheduleId)
+        {
+            var schedule = _context.Schedules.Include(x => x.Alerts)
+                .Where(x => x.ScheduleId == ScheduleId).FirstOrDefault();
+            if(schedule is null)
+            {
+                throw new ScheduleDontExistException();
+            }
+            if (ConsistsOfProperCrons(alerts))
+            {
+                schedule.Alerts = schedule.Alerts.Union(alerts);
+            }
+            else
+            {
+                throw new CroneVerificationException();
+            }
+
+            _context.SaveChanges();
+        }
+
+     
+
         public async Task RemoveScheduleFromChat(string ChatId)
         {
             var chat = _context.Chats.Include(x => x.Schedule).FirstOrDefault(x => x.ChatId == ChatId);
@@ -73,6 +95,21 @@ namespace Infrastructure.Repositories
             }
             _context.SaveChanges();
         }
+
+        public async Task UpdateScheduleName(string newName, int ScheduleId)
+        {
+            var schedule = _context.Schedules.Where(x => x.ScheduleId == ScheduleId).FirstOrDefault();
+
+            if(schedule is null)
+            {
+                throw new ScheduleDontExistException();
+            }
+
+            schedule.Name = newName;
+
+            _context.SaveChanges();
+        }
+
         private bool ConsistsOfProperCrons(IEnumerable<Alert> alerts)
         {
             foreach (Alert alert in alerts)
