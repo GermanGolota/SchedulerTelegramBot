@@ -92,5 +92,18 @@ namespace Infrastructure.Repositories
 
             return output;
         }
+        public async Task<int> GetScheduleIdOfChat(string ChatId)
+        {
+            var chat = _context.Chats.Where(x => x.ChatId == ChatId).FirstOrDefault();
+
+            if (chat is null)
+            {
+                throw new ChatDontExistException();
+            }
+
+            int? scheduleId = chat.ScheduleId;
+
+            return scheduleId ?? throw new ScheduleDontExistException();
+        }
     }
 }

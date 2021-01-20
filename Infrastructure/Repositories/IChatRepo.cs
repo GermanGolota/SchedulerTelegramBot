@@ -10,5 +10,6 @@ namespace Infrastructure.Repositories
         Task AddChat(string chatId, string adminId);
         Task DeleteChat(string chatId);
         List<Alert> GetAlertsOfChat(string chatId);
+        Task<int> GetScheduleIdOfChat(string ChatId);
     }
 }
