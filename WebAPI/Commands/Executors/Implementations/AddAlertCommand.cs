@@ -50,7 +50,7 @@ namespace WebAPI.Commands
 
             try
             {
-                await _jobs.AddJobsToExistingChat(chatId, model);
+                await _jobs.AddJobsToChatWithExistingSchedule(chatId, model);
             }
             catch(DataAccessException ex)
             {

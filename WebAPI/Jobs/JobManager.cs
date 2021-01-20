@@ -69,10 +69,10 @@ namespace WebAPI.Jobs
             }
         }
         //returns list of ids of created jobs
-        private List<string> SetupJobs(List<AlertModel> dtoAlerts, string chatId)
+        private List<string> SetupJobs(List<AlertModel> dtoAlerts, string chatId, int initialCount = 0)
         {
             List<string> jobIds = new List<string>();
-            int JobCount = 0;
+            int JobCount = initialCount;
             for (int i = 0; i < dtoAlerts.Count; i++)
             {
                 var alert = dtoAlerts[i];
@@ -109,7 +109,7 @@ namespace WebAPI.Jobs
             }
         }
 
-        public async Task AddJobsToExistingChat(ChatId chat, ScheduleUpdateModel model)
+        public async Task AddJobsToChatWithExistingSchedule(ChatId chat, ScheduleUpdateModel model)
         {
             string chatId = chat.Identifier.ToString();
 
