@@ -10,6 +10,7 @@ using Hangfire.PostgreSql;
 using WebAPI.Extensions;
 using WebAPI.Jobs;
 using Microsoft.AspNetCore.Http;
+using WebAPI.Commands;
 
 namespace WebAPI
 {
@@ -32,6 +33,7 @@ namespace WebAPI
 
             services.AddRepositories();
 
+            services.AddScoped<IUpdateManager, UpdateManager>();
             services.AddScoped<IJobManager, JobManager>();
 
             services.AddTelegramClient();
