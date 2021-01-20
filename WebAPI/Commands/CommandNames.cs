@@ -13,5 +13,6 @@ namespace WebAPI.Commands
         public readonly static string Start = "start";
         public readonly static string CreateSchedule = "createSchedule";
         public readonly static string AddAlerts = "addAlerts";
+        public readonly static string GetSchedule = "getSchedule";
     }
 }
