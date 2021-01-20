@@ -18,31 +18,22 @@ namespace WebAPI.Commands
         private readonly ITelegramClientAdapter _client;
         private readonly IJobManager _jobs;
         private readonly ILogger<SetupCommand> _logger;
+        private readonly IUpdateManager _updateHelper;
 
         public SetupCommand(ITelegramClientAdapter client, IJobManager jobs,
-            ILogger<SetupCommand> logger)
+            ILogger<SetupCommand> logger, IUpdateManager updateHelper)
         {
             this._client = client;
             this._jobs = jobs;
             this._logger = logger;
+            this._updateHelper = updateHelper;
         }
 
         public async Task Execute(Update update)
         {
-            var message = update.Message;
+            string fileContent = await _updateHelper.GetFileContentsFrom(update);
 
-            var chatId = message.Chat.Id.ToString();
-
-            var document = message.Document;
-            if (document is null)
-            {
-                await _client.SendTextMessageAsync(chatId, StandardMessages.NoFileAttached);
-                return;
-            }
-
-            var docId = document.FileId;
-
-            string fileContent = await GetFileContent(docId);
+            string chatId = update.Message.Chat.Id.ToString();
 
             try
             {
