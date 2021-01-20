@@ -7,10 +7,10 @@ namespace WebAPI.Commands
 {
     public static class CommandNames
     {
-        public static string Setup { get; } = "setup";
-        public static string DeleteSchedule { get; } = "deleteSchedule";
-        public static string DeleteChat { get; } = "deleteChat";
-        public static string Start { get; } = "start";
-        public static string CreateSchedule { get; } = "createSchedule";
+        public readonly static string Setup = "setup";
+        public readonly static string DeleteSchedule = "deleteSchedule";
+        public readonly static string DeleteChat = "deleteChat";
+        public readonly static string Start = "start";
+        public readonly static string CreateSchedule = "createSchedule";
     }
 }
