@@ -41,8 +41,8 @@ namespace WebAPI.Client
         {
             var client = await telegramClient.Value;
             var file = await client.GetFileAsync(fileId);
-            string fileBase = _config.GetValue<string>("DownloadFilesLocationBase");
-            string fileLocation = fileBase + Guid.NewGuid().ToString()+".json";
+
+            string fileLocation = GetRandomLocationForFile();
             FileStream fs = new FileStream(fileLocation, FileMode.Create);
             await client.DownloadFileAsync(file.FilePath, fs);
             fs.Close();
@@ -54,12 +54,26 @@ namespace WebAPI.Client
             var client = await telegramClient.Value;
             await client.SendStickerAsync(chat, stickerLocation);
         }
-
-        public async Task SendTextFileAsync(ChatId chat, string fileContent)
+        private string GetRandomLocationForFile()
+        {
+            string fileBase = _config.GetValue<string>("DownloadFilesLocationBase");
+            return fileBase + Guid.NewGuid().ToString() + ".json";
+        }
+        public async Task SendTextFileAsync(ChatId chat, string fileContent, string fileName)
         {
             var client = await telegramClient.Value;
-            InputOnlineFile file = new InputOnlineFile(fileContent);
+            string location = GetRandomLocationForFile();
+            using (FileStream stream = new FileStream(location, FileMode.Create, FileAccess.Write))
+            {
+                using (StreamWriter sw = new StreamWriter(stream))
+                {
+                    sw.Write(fileContent);
+                }
+            }
+            FileStream fs = new FileStream(location, FileMode.Open, FileAccess.Read);
+            InputOnlineFile file = new InputOnlineFile(fs, fileName);
             await client.SendDocumentAsync(chat, file);
+            fs.Close();
         }
     }
 }
