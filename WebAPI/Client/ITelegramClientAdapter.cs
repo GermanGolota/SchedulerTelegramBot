@@ -13,5 +13,6 @@ namespace WebAPI.Client
         Task<string> DownloadFileFromId(string fileId);
 
         Task SendStickerAsync(ChatId chat, string stickerLocation);
+        Task SendTextFileAsync(ChatId chat, string fileContent);
     }
 }

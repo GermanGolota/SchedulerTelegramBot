@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.InputFiles;
 
 namespace WebAPI.Client
 {
@@ -52,6 +53,13 @@ namespace WebAPI.Client
         {
             var client = await telegramClient.Value;
             await client.SendStickerAsync(chat, stickerLocation);
+        }
+
+        public async Task SendTextFileAsync(ChatId chat, string fileContent)
+        {
+            var client = await telegramClient.Value;
+            InputOnlineFile file = new InputOnlineFile(fileContent);
+            await client.SendDocumentAsync(chat, file);
         }
     }
 }
