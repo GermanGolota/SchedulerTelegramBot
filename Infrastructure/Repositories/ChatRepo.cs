@@ -111,14 +111,15 @@ namespace Infrastructure.Repositories
 
         public async Task<ScheduleModel> GetScheduleForChat(string chatId)
         {
-            var chat = _context.Chats.Where(x => x.ChatId == chatId).Include(x => x.Schedule).FirstOrDefault();
+            var chat = _context.Chats.Where(x => x.ChatId == chatId).FirstOrDefault();
 
             if(chat is null)
             {
                 throw new ChatDontExistException();
             }
 
-            var schedule = chat.Schedule;
+            var schedule = _context.Schedules.Where(x=>x.ScheduleId == chat.ScheduleId)
+                .Include(x=>x.Alerts).FirstOrDefault();
 
             if(schedule is null)
             {
