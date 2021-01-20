@@ -42,7 +42,17 @@ namespace Infrastructure.Repositories
             _context.SaveChanges();
         }
 
-     
+        public async Task<int> GetAlertsCountOf(int scheduleId)
+        {
+            var schedule = _context.Schedules.Where(x => x.ScheduleId == scheduleId).Include(x=>x.Alerts).FirstOrDefault();
+
+            if(schedule is null)
+            {
+                throw new ScheduleDontExistException();
+            }
+
+            return schedule.Alerts.Count();
+        }
 
         public async Task RemoveScheduleFromChat(string ChatId)
         {

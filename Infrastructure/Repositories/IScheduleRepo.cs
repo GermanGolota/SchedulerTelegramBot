@@ -10,5 +10,6 @@ namespace Infrastructure.Repositories
         Task RemoveScheduleFromChat(string ChatId);
         Task AddAlertsToSchedule(IEnumerable<Alert> alerts, int ScheduleId);
         Task UpdateScheduleName(string newName, int ScheduleId);
+        Task<int> GetAlertsCountOf(int scheduleId);
     }
 }
