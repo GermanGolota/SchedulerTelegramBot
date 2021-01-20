@@ -1,6 +1,7 @@
 ﻿using Core.Entities;
 using Hangfire;
 using Infrastructure.DTOs;
+using Infrastructure.Exceptions;
 using Infrastructure.Repositories;
 using System;
 using System.Collections.Generic;
@@ -105,6 +106,51 @@ namespace WebAPI.Jobs
             foreach (string jobId in jobIds)
             {
                 RecurringJob.RemoveIfExists(jobId);
+            }
+        }
+
+        public async Task AddJobsToExistingChat(ChatId chat, ScheduleUpdateModel model)
+        {
+            string chatId = chat.Identifier.ToString();
+
+            var dtoAlerts = model.Alerts;
+
+            string newName = model.NewName;
+
+            List<string> jobIds = SetupJobs(dtoAlerts, chatId);
+
+            try
+            {
+                var alerts = ConvertAlerts(dtoAlerts);
+
+                SetJobIdsToAlerts(jobIds, alerts);
+
+                int scheduleId = await _chatRepo.GetScheduleIdOfChat(chatId);
+
+                await ApplyNewName(newName, scheduleId);
+
+                await _scheduleRepo.AddAlertsToSchedule(alerts, scheduleId);
+            }
+            catch
+            {
+                DeleteCreatedJobs(jobIds);
+                throw;
+            }
+        }
+        private List<Alert> ConvertAlerts(List<AlertModel> alerts)
+        {
+            List<Alert> output = new List<Alert>();
+            foreach (AlertModel alert in alerts)
+            {
+                output.Add(_converter.ConvertAlertFromDto(alert));
+            }
+            return output;
+        }
+        private async Task ApplyNewName(string newName, int scheduleId)
+        {
+            if (newName is not null)
+            {
+                await _scheduleRepo.UpdateScheduleName(newName, scheduleId);
             }
         }
     }

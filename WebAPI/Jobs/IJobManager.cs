@@ -8,5 +8,6 @@ namespace WebAPI.Jobs
     {
         Task SetupJobsForChat(ScheduleModel model, ChatId chat);
         Task DeleteJobsFromChat(ChatId chat);
+        Task AddJobsToExistingChat(ChatId chat, ScheduleUpdateModel model);
     }
 }
