@@ -5,6 +5,10 @@
     <UserSecretsId>771f8374-879e-4551-a9a9-7b2ad081784e</UserSecretsId>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <WarningLevel>0</WarningLevel>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Hangfire" Version="1.7.18" />
     <PackageReference Include="Hangfire.PostgreSql" Version="1.8.1" />

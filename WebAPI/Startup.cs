@@ -9,6 +9,7 @@ using Hangfire;
 using Hangfire.PostgreSql;
 using WebAPI.Extensions;
 using WebAPI.Jobs;
+using Microsoft.AspNetCore.Http;
 
 namespace WebAPI
 {
@@ -44,10 +45,18 @@ namespace WebAPI
                 x.connectionString = Config.GetConnectionString("Main");
                 x.PrepareSchema = true;
             });
+
+            services.AddHttpsRedirection(options =>
+            {
+                options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
+                options.HttpsPort = 8443;
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseHttpsRedirection();
+
             app.UseHangfireServer();
 
             //could be moved into dev mode only
