@@ -12,5 +12,6 @@ namespace WebAPI.Commands
         public readonly static string DeleteChat = "deleteChat";
         public readonly static string Start = "start";
         public readonly static string CreateSchedule = "createSchedule";
+        public readonly static string AddAlerts = "addAlerts";
     }
 }

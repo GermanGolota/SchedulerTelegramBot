@@ -14,5 +14,6 @@ namespace WebAPI.Commands
         public static string ScheduleDeletionSuccess { get; } = "Succesfully deleted schedule";
         public static string ChatDeletionSuccess { get; } = "Successfully deleted chat";
         public static string BadFileData { get; } = "Data in the file is not valid";
+        public static string AddedAlertsSuccess { get; } = "Successfully added alerts";
     }
 }
