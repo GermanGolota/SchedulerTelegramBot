@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
@@ -40,11 +41,21 @@ namespace WebAPI.Client
             var client = await telegramClient.Value;
             var file = await client.GetFileAsync(fileId);
 
-            string fileLocation = GetRandomLocationForFile();
-            FileStream fs = new FileStream(fileLocation, FileMode.Create);
-            await client.DownloadFileAsync(file.FilePath, fs);
-            fs.Close();
-            return fileLocation;
+            string tempFile = "temp.txt";
+
+            using (FileStream fs = new FileStream(tempFile, FileMode.Create))
+            {
+                await client.DownloadFileAsync(file.FilePath, fs);
+            }
+            string fileContent;
+            using (StreamReader sr = new StreamReader(new FileStream(tempFile, FileMode.Open)))
+            {
+                fileContent = sr.ReadToEnd();    
+            }
+
+            System.IO.File.Delete(tempFile);
+
+            return fileContent;
         }
 
         public async Task SendStickerAsync(ChatId chat, string stickerLocation)
@@ -52,26 +63,22 @@ namespace WebAPI.Client
             var client = await telegramClient.Value;
             await client.SendStickerAsync(chat, stickerLocation);
         }
-        private string GetRandomLocationForFile()
-        {
-            string fileBase = _config.GetValue<string>("DownloadFilesLocationBase");
-            return fileBase + Guid.NewGuid().ToString() + ".json";
-        }
         public async Task SendTextFileAsync(ChatId chat, string fileContent, string fileName)
         {
             var client = await telegramClient.Value;
-            string location = GetRandomLocationForFile();
-            using (FileStream stream = new FileStream(location, FileMode.Create, FileAccess.Write))
+            string tempFile = "temp.txt";
+            using (FileStream stream = new FileStream(tempFile, FileMode.Create, FileAccess.Write))
             {
                 using (StreamWriter sw = new StreamWriter(stream))
                 {
                     sw.Write(fileContent);
                 }
             }
-            FileStream fs = new FileStream(location, FileMode.Open, FileAccess.Read);
+            FileStream fs = new FileStream(tempFile, FileMode.Open, FileAccess.Read);
             InputOnlineFile file = new InputOnlineFile(fs, fileName);
             await client.SendDocumentAsync(chat, file);
             fs.Close();
+            System.IO.File.Delete(tempFile);
         }
 
         public async Task SetupWebhook(string webhookUrl)

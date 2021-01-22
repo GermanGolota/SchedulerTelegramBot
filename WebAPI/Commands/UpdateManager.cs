@@ -29,20 +29,12 @@ namespace WebAPI.Commands
 
             var docId = document.FileId;
 
-            string fileContent = await GetFileContent(docId);
-            return fileContent;
+            return await GetFileContent(docId);
         }
         private async Task<string> GetFileContent(string fileId)
         {
-            string fileLocation = await _client.DownloadFileFromId(fileId);
-            using (FileStream stream = new FileStream(fileLocation, FileMode.Open, FileAccess.Read))
-            {
-                using (StreamReader sr = new StreamReader(stream))
-                {
-                    string fileContent = sr.ReadToEnd();
-                    return fileContent;
-                }
-            }
+            string fileContent = await _client.DownloadFileFromId(fileId);
+            return fileContent;
         }
     }
 }
