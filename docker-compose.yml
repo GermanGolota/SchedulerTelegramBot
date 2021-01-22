@@ -1,0 +1,27 @@
+version: "3"
+services:
+  postgresdb:
+    image: postgres
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_DB: "scheduledb"
+    ports:
+      - "5432:5432"
+  scheduleapi:
+    image: yaroslavholota/scheduler
+    environment:
+      DBPort: 5432
+      DBUser: postgres
+      Password: password
+      DBHost: "postgresdb"
+      DBName: "scheduledb"
+      Token: <your token goes here>
+      DownloadFilesLocationBase: <your location goes here>
+      UseLongPulling: "true"
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+    depends_on:
+      - "postgresdb"
+    restart: unless-stopped
