@@ -22,23 +22,12 @@ namespace SchedulerTelegramBot.Tests
         private SetupCommand _sut;
         private string testingFileLocation = System.IO.Directory.GetCurrentDirectory() + @"\test.json";
         private readonly Mock<IJobManager> _jobMock = new Mock<IJobManager>();
+        private readonly Mock<IUpdateManager> _updaterMock = new Mock<IUpdateManager>();
         private const string FileId = "123";
         public SetupCommandTests()
         {
             _sut = new SetupCommand(_clientMock.Object, _jobMock.Object,
-                new LoggerMock<SetupCommand>());
-        }
-        [Fact]
-        public async Task ExecuteCommandIfMatched_ShouldNotSetupjobs_NoFile()
-        {
-            //Arrange
-            Setup();
-
-            Update update = GetUpdateWithNoFile();
-            //Act
-            await _sut.Execute(update);
-            //Assert
-            AssertJobsNotBeenSet();
+                new LoggerMock<SetupCommand>(), _updaterMock.Object);
         }
         [Fact]
         public async Task ExecuteCommandIfMatched_ShouldSetupjobs_FileProvided()
@@ -59,7 +48,6 @@ namespace SchedulerTelegramBot.Tests
         }
         private void SetupClient()
         {
-
             SetupMessageSendingMock();
             var testingSchedule = new ScheduleModel
             {
@@ -85,7 +73,7 @@ namespace SchedulerTelegramBot.Tests
                     sw.Write(fileContent);
                 }
             }
-            _clientMock.Setup(x => x.DownloadFileFromId(It.IsAny<string>())).ReturnsAsync(testingFileLocation);
+            _updaterMock.Setup(x => x.GetFileContentsFrom(It.IsAny<Update>())).ReturnsAsync(fileContent);
         }
         private void SetupJobManager()
         {
