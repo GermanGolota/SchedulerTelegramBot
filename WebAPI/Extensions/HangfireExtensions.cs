@@ -28,11 +28,13 @@ namespace WebAPI.Extensions
         {
             HangfireSetupOptions options = new HangfireSetupOptions();
             setOptions(options);
-            string connString = options.connectionString;
+            string connString = options.ConnectionString;
             bool prepareSchema = options.PrepareSchema;
             var sqlOptions = new PostgreSqlStorageOptions();
             sqlOptions.PrepareSchemaIfNecessary = prepareSchema;
-
+            sqlOptions.SchemaName = "hangfire";
+            GlobalConfiguration.Configuration
+               .UsePostgreSqlStorage(connString, sqlOptions);
             services.AddHangfire(config =>
             {
                 config.UsePostgreSqlStorage(connString, sqlOptions);
@@ -43,7 +45,7 @@ namespace WebAPI.Extensions
         public class HangfireSetupOptions
         {
             public bool PrepareSchema { get; set; }
-            public string connectionString { get; set; }
+            public string ConnectionString { get; set; }
         }
     }
 }

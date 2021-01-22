@@ -11,6 +11,7 @@ using WebAPI.Extensions;
 using WebAPI.Jobs;
 using Microsoft.AspNetCore.Http;
 using WebAPI.Commands;
+using System;
 
 namespace WebAPI
 {
@@ -24,9 +25,10 @@ namespace WebAPI
         }
         public void ConfigureServices(IServiceCollection services)
         {
+            string connectionString = GetConnectionString(Config);
             services.AddDbContext<SchedulesContext>(options =>
             {
-                options.UseNpgsql(Config.GetConnectionString("Main"), b=>b.MigrationsAssembly(nameof(Infrastructure)));
+                options.UseNpgsql(connectionString, b=>b.MigrationsAssembly(nameof(Infrastructure)));
             });
 
             services.AddHttpClient();
@@ -44,7 +46,7 @@ namespace WebAPI
 
             services.AddConfiguredHangfire(x=>
             {
-                x.connectionString = Config.GetConnectionString("Main");
+                x.ConnectionString = connectionString;
                 x.PrepareSchema = true;
             });
 
@@ -53,6 +55,18 @@ namespace WebAPI
                 options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
                 options.HttpsPort = 8443;
             });
+        }
+
+        private string GetConnectionString(IConfiguration config)
+        {
+            var port = config["DBPort"] ?? "5432";
+            var user = config["DBUser"] ?? "postgres";
+            var password = config["Password"] ?? "password";
+            var dbHost = config["DBHost"] ?? "localhost";
+            var initialDb = config["DBName"] ?? "scheduledb";
+            string connString = $"Host={dbHost};Port={port};" +
+                $"Database={initialDb};Username={user};Password={password}";
+            return connString;
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

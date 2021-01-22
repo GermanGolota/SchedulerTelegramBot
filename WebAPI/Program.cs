@@ -54,13 +54,24 @@ namespace WebAPI
             {
                 var provider = scope.ServiceProvider;
                 var client = provider.GetService<ITelegramClientAdapter>();
+                var config = provider.GetService<IConfiguration>();
+                string useLongPulling = config["UseLongPulling"] ?? "false";
                 await client.BootUpClient();
+                if (useLongPulling.Equals("true"))
+                {
+                    await UseLongPullingInNewThread(host);
+                }
+                else
+                {
+                    string webhook = config["Webhook"];
+                    await client.SetupWebhook(webhook);
+                }
             }
-#if DEBUG
-            Task.Run(() => GetUpdatesManually(host));
-#endif
         }
-#if DEBUG
+        private static async Task UseLongPullingInNewThread(IHost host)
+        {
+            Task.Run(() => GetUpdatesManually(host));
+        }
         private static async Task GetUpdatesManually(IHost host)
         {
             using (var scope = host.Services.CreateScope())
@@ -100,6 +111,5 @@ namespace WebAPI
                 }
             }
         }
-#endif
     }
 }
