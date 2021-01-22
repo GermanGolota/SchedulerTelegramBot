@@ -25,12 +25,13 @@ Location to the temporary directory for files downloads
 </br>
 Indicates, whether long-pulling or webhooks should be used.
 </br>
-Note: default value is false. If you decide to use webhooks, then you would need to specify webhook url:
+<strong>Note: If you use LongPulling, then you would not have to specify webhook url, otherwise:</strong>
 </br>
 <code>Webhook: *your address*/api/message/update</code> 
 </br>
 Your address is the address to which telegram api should send updates
-Note: If this address is unavailable, then telegram would not be able to send updates. In that case, I recommend to use<span><a href="#longPulling">LongPulling</a></span>
+</br>
+<strong>Note: If this address is unavailable, then telegram would not be able to send updates. In that case, I recommend to use <span><a href="#longPulling">LongPulling</a></span></strong>
 </br>
 4) Run:
 <code>docker-compose up</code>
