@@ -14,5 +14,6 @@ namespace WebAPI.Client
 
         Task SendStickerAsync(ChatId chat, string stickerLocation);
         Task SendTextFileAsync(ChatId chat, string fileContent, string fileName);
+        Task SetupWebhook(string webhookUrl);
     }
 }

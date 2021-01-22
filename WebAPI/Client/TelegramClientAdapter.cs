@@ -15,14 +15,12 @@ namespace WebAPI.Client
 
         public TelegramClientAdapter(ITelegramBotClientFactory clientFactory, IConfiguration config)
         {
-
             _config = config;
             string token = _config.GetValue<string>("Token");
-            string webhook = _config.GetValue<string>("Webhook");
 
             this.telegramClient = new Lazy<Task<ITelegramBotClient>>(async () =>
             {
-                return await clientFactory.CreateClient(token, webhook);
+                return await clientFactory.CreateClient(token);
             });
         }
 
@@ -74,6 +72,15 @@ namespace WebAPI.Client
             InputOnlineFile file = new InputOnlineFile(fs, fileName);
             await client.SendDocumentAsync(chat, file);
             fs.Close();
+        }
+
+        public async Task SetupWebhook(string webhookUrl)
+        {
+            var client = await telegramClient.Value;
+
+            await client.DeleteWebhookAsync();
+
+            await client.SetWebhookAsync(webhookUrl);
         }
     }
 }

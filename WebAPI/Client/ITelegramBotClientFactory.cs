@@ -5,6 +5,6 @@ namespace WebAPI.Client
 {
     public interface ITelegramBotClientFactory
     {
-        Task<ITelegramBotClient> CreateClient(string token, string webhookUrl);
+        Task<ITelegramBotClient> CreateClient(string token);
     }
 }

@@ -12,13 +12,9 @@ namespace WebAPI.Client
         {
             this._client = client;
         }
-        public async Task<ITelegramBotClient> CreateClient(string token, string webhookUrl)
+        public async Task<ITelegramBotClient> CreateClient(string token)
         {
             var client = new TelegramBotClient(token, _client);
-
-            await client.DeleteWebhookAsync();
-
-            await client.SetWebhookAsync(webhookUrl);
 
             return client;
         }
