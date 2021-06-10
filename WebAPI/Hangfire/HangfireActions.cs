@@ -6,9 +6,9 @@ namespace WebAPI.Hangfire
 {
     public class HangfireActions
     {
-        private readonly ITelegramClientAdapter _client;
+        private readonly ITelegramClient _client;
 
-        public HangfireActions(ITelegramClientAdapter client)
+        public HangfireActions(ITelegramClient client)
         {
             this._client = client;
         }

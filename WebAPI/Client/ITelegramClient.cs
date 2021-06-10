@@ -4,7 +4,7 @@ using Telegram.Bot.Types;
 
 namespace WebAPI.Client
 {
-    public interface ITelegramClientAdapter
+    public interface ITelegramClient
     {
         Task BootUpClient();
 

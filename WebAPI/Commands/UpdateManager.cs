@@ -11,12 +11,13 @@ namespace WebAPI.Commands
 {
     public class UpdateManager : IUpdateManager
     {
-        private readonly ITelegramClientAdapter _client;
+        private readonly ITelegramClient _client;
 
-        public UpdateManager(ITelegramClientAdapter client)
+        public UpdateManager(ITelegramClient client)
         {
             this._client = client;
         }
+
         public async Task<string> GetFileContentsFrom(Update update)
         {
             var message = update.Message;

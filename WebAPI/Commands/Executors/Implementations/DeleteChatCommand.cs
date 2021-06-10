@@ -13,11 +13,11 @@ namespace WebAPI.Commands
 {
     public class DeleteChatCommand : ICommand
     {
-        private readonly ITelegramClientAdapter _client;
+        private readonly ITelegramClient _client;
         private readonly IChatRepo _repo;
         private readonly ILogger<DeleteChatCommand> _logger;
 
-        public DeleteChatCommand(ITelegramClientAdapter client,
+        public DeleteChatCommand(ITelegramClient client,
             IChatRepo repo, ILogger<DeleteChatCommand> logger)
         {
             this._client = client;

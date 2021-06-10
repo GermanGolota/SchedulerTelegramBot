@@ -7,7 +7,7 @@ namespace WebAPI.Commands.Verifiers
 {
     public class SetupCommandMatcher : FileAdminCommandMatcherBehaviour<SetupCommand>
     {
-        public SetupCommandMatcher(IChatRepo repo, ITelegramClientAdapter client) 
+        public SetupCommandMatcher(IChatRepo repo, ITelegramClient client) 
             : base(client,repo, CommandNames.Setup)
         {
         }

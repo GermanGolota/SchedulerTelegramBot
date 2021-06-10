@@ -14,11 +14,11 @@ namespace WebAPI.Commands
 {
     public class DeleteScheduleCommand : ICommand
     {
-        private readonly ITelegramClientAdapter _client;
+        private readonly ITelegramClient _client;
         private readonly IJobManager _jobs;
         private readonly ILogger<DeleteScheduleCommand> _logger;
 
-        public DeleteScheduleCommand(ITelegramClientAdapter client, IJobManager jobs,
+        public DeleteScheduleCommand(ITelegramClient client, IJobManager jobs,
             ILogger<DeleteScheduleCommand> logger)
         {
             this._client = client;

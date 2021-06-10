@@ -15,12 +15,12 @@ namespace WebAPI.Commands
 {
     public class SetupCommand : ICommand
     {
-        private readonly ITelegramClientAdapter _client;
+        private readonly ITelegramClient _client;
         private readonly IJobManager _jobs;
         private readonly ILogger<SetupCommand> _logger;
         private readonly IUpdateManager _updateHelper;
 
-        public SetupCommand(ITelegramClientAdapter client, IJobManager jobs,
+        public SetupCommand(ITelegramClient client, IJobManager jobs,
             ILogger<SetupCommand> logger, IUpdateManager updateHelper)
         {
             this._client = client;

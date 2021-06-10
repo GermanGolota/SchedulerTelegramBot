@@ -15,7 +15,7 @@ namespace WebAPI.Extensions
         {
             services.AddSingleton<ITelegramBotClientFactory, TelegramBotClientFactory>();
 
-            services.AddSingleton<ITelegramClientAdapter, TelegramClientAdapter>();
+            services.AddSingleton<ITelegramClient, TelegramClientAdapter>();
 
             return services;
         }

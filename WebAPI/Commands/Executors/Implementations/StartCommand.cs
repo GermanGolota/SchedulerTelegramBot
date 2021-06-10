@@ -12,10 +12,10 @@ namespace WebAPI.Commands
     public class StartCommand : ICommand
     {
         private readonly IChatRepo _repo;
-        private readonly ITelegramClientAdapter _client;
+        private readonly ITelegramClient _client;
         private readonly ILogger<StartCommand> _logger;
         private const string StartupStickerId = @"CAACAgIAAxkBAAMrX_oDjl4RZ7SqvMaNBxaTese356AAAg0AA3EcFxMefvS-UNPkwR4E";
-        public StartCommand(IChatRepo repo, ITelegramClientAdapter client, ILogger<StartCommand> logger)
+        public StartCommand(IChatRepo repo, ITelegramClient client, ILogger<StartCommand> logger)
         {
             this._repo = repo;
             this._client = client;

@@ -14,11 +14,11 @@ namespace WebAPI.Commands
 {
     public class AddAlertCommand : ICommand
     {
-        private readonly ITelegramClientAdapter _client;
+        private readonly ITelegramClient _client;
         private readonly IUpdateManager _updateHelper;
         private readonly IJobManager _jobs;
 
-        public AddAlertCommand(ITelegramClientAdapter client, IUpdateManager updater, IJobManager jobs)
+        public AddAlertCommand(ITelegramClient client, IUpdateManager updater, IJobManager jobs)
         {
             this._client = client;
             this._updateHelper = updater;

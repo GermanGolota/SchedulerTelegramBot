@@ -6,7 +6,7 @@ namespace SchedulerTelegramBot.Tests
 {
     public class CommandTestBase
     {
-        protected readonly Mock<ITelegramClientAdapter> _clientMock = new Mock<ITelegramClientAdapter>();
+        protected readonly Mock<ITelegramClient> _clientMock = new Mock<ITelegramClient>();
 
         protected const string TestChatId = "56675";
 

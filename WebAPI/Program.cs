@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using SchedulerTelegramBot.Controllers;
 using System;
 using System.Collections.Generic;
@@ -53,7 +54,7 @@ namespace WebAPI
             using (var scope = host.Services.CreateScope())
             {
                 var provider = scope.ServiceProvider;
-                var client = provider.GetService<ITelegramClientAdapter>();
+                var client = provider.GetService<ITelegramClient>();
                 var config = provider.GetService<IConfiguration>();
                 string useLongPulling = config["UseLongPulling"] ?? "false";
                 await client.BootUpClient();
@@ -90,24 +91,34 @@ namespace WebAPI
 
                 int lastUpdateId = lastUpdate?.Id ?? 0;
 
+                var logger = provider.GetRequiredService<ILogger<Program>>();
+
                 while (true)
                 {
-                    var updates = await client.GetUpdatesAsync(offset: lastUpdateId + 1);
-
-                    foreach (var update in updates)
+                    try
                     {
-                        try
-                        {
-                            await controller.Update(update);
-                        }
-                        catch (Exception exc)
-                        {
-                            Console.WriteLine(exc.Message);
-                        }
-                        lastUpdateId = update.Id;
-                    }
+                        var updates = await client.GetUpdatesAsync(offset: lastUpdateId + 1);
 
-                    await Task.Delay(1000);
+                        foreach (var update in updates)
+                        {
+                            try
+                            {
+                                await controller.Update(update);
+                                logger.LogInformation("Send message in responce to update");
+                            }
+                            catch (Exception exc)
+                            {
+                                logger.LogError(exc, "Something went wrong while sending reply");
+                            }
+                            lastUpdateId = update.Id;
+                        }
+
+                        await Task.Delay(1000);
+                    }
+                    catch (Exception exc)
+                    {
+                        logger.LogError(exc, "Something went wrong while receiving updates");
+                    }
                 }
             }
         }

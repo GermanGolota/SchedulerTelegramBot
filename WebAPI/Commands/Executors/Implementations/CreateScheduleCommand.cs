@@ -9,9 +9,9 @@ namespace WebAPI.Commands
 {
     public class CreateScheduleCommand : ICommand
     {
-        private readonly ITelegramClientAdapter _client;
+        private readonly ITelegramClient _client;
 
-        public CreateScheduleCommand(ITelegramClientAdapter client)
+        public CreateScheduleCommand(ITelegramClient client)
         {
             this._client = client;
         }

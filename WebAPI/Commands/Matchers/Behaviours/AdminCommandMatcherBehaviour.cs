@@ -11,10 +11,10 @@ namespace WebAPI.Commands.Verifiers
 {
     public class AdminCommandMatcherBehaviour<T> : AdminCommandMatcherBase<T> where T : ICommand
     {
-        private readonly ITelegramClientAdapter _client;
+        private readonly ITelegramClient _client;
 
         private string commandName { get; init; }
-        public AdminCommandMatcherBehaviour(IChatRepo repo, ITelegramClientAdapter client, string commandName):base(repo)
+        public AdminCommandMatcherBehaviour(IChatRepo repo, ITelegramClient client, string commandName):base(repo)
         {
             this._client = client;
             this.commandName = commandName;

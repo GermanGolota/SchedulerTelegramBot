@@ -13,9 +13,9 @@ namespace WebAPI.Commands
     public class GetScheduleCommand : ICommand
     {
         private readonly IChatRepo _repo;
-        private readonly ITelegramClientAdapter _client;
+        private readonly ITelegramClient _client;
 
-        public GetScheduleCommand(IChatRepo repo, ITelegramClientAdapter client)
+        public GetScheduleCommand(IChatRepo repo, ITelegramClient client)
         {
             this._repo = repo;
             this._client = client;

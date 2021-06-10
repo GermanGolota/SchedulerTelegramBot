@@ -9,7 +9,7 @@ using Telegram.Bot.Types.InputFiles;
 
 namespace WebAPI.Client
 {
-    public class TelegramClientAdapter : ITelegramClientAdapter
+    public class TelegramClientAdapter : ITelegramClient
     {
         private readonly Lazy<Task<ITelegramBotClient>> telegramClient;
         private readonly IConfiguration _config;

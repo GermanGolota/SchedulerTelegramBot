@@ -9,7 +9,7 @@ namespace WebAPI.Commands.Verifiers
 {
     public class AddAlertsCommandMatcher:FileAdminCommandMatcherBehaviour<AddAlertCommand>
     {
-        public AddAlertsCommandMatcher(ITelegramClientAdapter client, IChatRepo repo)
+        public AddAlertsCommandMatcher(ITelegramClient client, IChatRepo repo)
             :base(client, repo, CommandNames.AddAlerts)
         {
 
