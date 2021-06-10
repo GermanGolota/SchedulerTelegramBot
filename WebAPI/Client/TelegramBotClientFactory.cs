@@ -4,7 +4,7 @@ using Telegram.Bot;
 
 namespace WebAPI.Client
 {
-    public class TelegramBotClientFactory : ITelegramBotClientFactory
+    public class TelegramBotClientFactory
     {
         private readonly HttpClient _client;
 
@@ -12,11 +12,11 @@ namespace WebAPI.Client
         {
             this._client = client;
         }
-        public async Task<ITelegramBotClient> CreateClient(string token)
+
+        public Task<ITelegramBotClient> CreateClient(string token)
         {
             var client = new TelegramBotClient(token, _client);
-
-            return client;
+            return Task.FromResult(client as ITelegramBotClient);
         }
     }
 }

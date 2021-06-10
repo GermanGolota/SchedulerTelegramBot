@@ -14,7 +14,7 @@ namespace WebAPI.Client
         private readonly Lazy<Task<ITelegramBotClient>> telegramClient;
         private readonly IConfiguration _config;
 
-        public TelegramClientAdapter(ITelegramBotClientFactory clientFactory, IConfiguration config)
+        public TelegramClientAdapter(TelegramBotClientFactory clientFactory, IConfiguration config)
         {
             _config = config;
             string token = _config.GetValue<string>("Token");

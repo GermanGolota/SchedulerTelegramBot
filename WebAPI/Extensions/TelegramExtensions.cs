@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 using WebAPI.Client;
 using WebAPI.Commands;
-using WebAPI.Commands.Verifiers;
 
 namespace WebAPI.Extensions
 {
@@ -13,7 +12,7 @@ namespace WebAPI.Extensions
     {
         public static IServiceCollection AddTelegramClient(this IServiceCollection services)
         {
-            services.AddSingleton<ITelegramBotClientFactory, TelegramBotClientFactory>();
+            services.AddSingleton<TelegramBotClientFactory>();
 
             services.AddSingleton<ITelegramClient, TelegramClientAdapter>();
 
