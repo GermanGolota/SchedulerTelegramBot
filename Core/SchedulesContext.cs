@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Core
 {
-    public class SchedulesContext:DbContext
+    public class SchedulesContext : DbContext
     {
-        public SchedulesContext(DbContextOptions<SchedulesContext> options):base(options)
+        public SchedulesContext(DbContextOptions<SchedulesContext> options) : base(options)
         {
 
         }
