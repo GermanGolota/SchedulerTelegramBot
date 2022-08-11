@@ -12,6 +12,7 @@ using WebAPI.Jobs;
 using Microsoft.AspNetCore.Http;
 using WebAPI.Commands;
 using System;
+using WebAPI.Services;
 
 namespace WebAPI
 {
@@ -55,6 +56,12 @@ namespace WebAPI
                 options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
                 options.HttpsPort = 8443;
             });
+
+            string useLongPulling = Config["UseLongPulling"] ?? "false";
+            if (useLongPulling == "true")
+            {
+                services.AddHostedService<LongPullingTelegramService>();
+            }
         }
 
         private string GetConnectionString(IConfiguration config)

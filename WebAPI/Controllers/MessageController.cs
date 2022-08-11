@@ -43,6 +43,7 @@ namespace SchedulerTelegramBot.Controllers
             }
             return Ok();
         }
+
         private ICommandController GetCommandController(ICommand command, IServiceProvider provider)
         {
             Type commandType = command.GetType();
@@ -50,6 +51,5 @@ namespace SchedulerTelegramBot.Controllers
             controllerType = controllerType.MakeGenericType(commandType);
              return provider.GetRequiredService(controllerType) as ICommandController;
         }
-
     }
 }
